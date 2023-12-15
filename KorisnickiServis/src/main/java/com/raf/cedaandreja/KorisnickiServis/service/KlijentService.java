@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.service;
 
+import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface KlijentService {
 
     KlijentDto findKlijent(String ime, String prezime);
 
-    KlijentDto addKlijent(KlijentDto klijentDto);
+    KlijentDto addKlijent(KlijentCreateDto klijentCreateDto);
 
     KlijentDto updateKlijent(KlijentDto klijentDto);
 }

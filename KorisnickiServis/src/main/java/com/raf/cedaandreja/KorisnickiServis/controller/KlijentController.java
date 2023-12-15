@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.controller;
 
+import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
 import com.raf.cedaandreja.KorisnickiServis.service.KlijentService;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,8 @@ public class KlijentController {
     }
 
     @PostMapping
-    public ResponseEntity<KlijentDto> addKlijent(@RequestBody KlijentDto klijentDto) {
-        return new ResponseEntity<>(klijentService.addKlijent(klijentDto), HttpStatus.OK);
+    public ResponseEntity<KlijentDto> addKlijent(@RequestBody KlijentCreateDto klijentCreateDto) {
+        return new ResponseEntity<>(klijentService.addKlijent(klijentCreateDto), HttpStatus.OK);
     }
 
     @PutMapping

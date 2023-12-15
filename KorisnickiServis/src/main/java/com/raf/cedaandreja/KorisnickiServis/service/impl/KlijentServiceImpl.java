@@ -1,6 +1,11 @@
 package com.raf.cedaandreja.KorisnickiServis.service.impl;
 
+import com.raf.cedaandreja.KorisnickiServis.domain.Klijent;
+import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
+import com.raf.cedaandreja.KorisnickiServis.domain.User;
+import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
+import com.raf.cedaandreja.KorisnickiServis.mapper.KlijentMapper;
 import com.raf.cedaandreja.KorisnickiServis.repository.KlijentRepository;
 import com.raf.cedaandreja.KorisnickiServis.repository.ManagerRepository;
 import com.raf.cedaandreja.KorisnickiServis.service.KlijentService;
@@ -11,11 +16,13 @@ import java.util.List;
 @Service
 public class KlijentServiceImpl implements KlijentService {
     private KlijentRepository klijentRepository;
-    //mapper
+    private KlijentMapper klijentMapper;
 
-    public KlijentServiceImpl(KlijentRepository klijentRepository){
+    public KlijentServiceImpl(KlijentRepository klijentRepository,KlijentMapper klijentMapper){
         this.klijentRepository=klijentRepository;
+        this.klijentMapper = klijentMapper;
     }
+
     @Override
     public List<KlijentDto> findAllKlijents() {
         return null;
@@ -27,8 +34,10 @@ public class KlijentServiceImpl implements KlijentService {
     }
 
     @Override
-    public KlijentDto addKlijent(KlijentDto klijentDto) {
-        return null;
+    public KlijentDto addKlijent(KlijentCreateDto klijentCreateDto) {
+        User klijent = klijentMapper.klijentCreateDtoToKlijent(klijentCreateDto);
+        klijentRepository.save((Klijent) klijent);
+        return klijentMapper.klijentToKlijentDto((Klijent) klijent);
     }
 
     @Override
