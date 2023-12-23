@@ -2,6 +2,8 @@ package com.raf.cedaandreja.KorisnickiServis.controller;
 
 import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
 import com.raf.cedaandreja.KorisnickiServis.service.KlijentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,4 +39,11 @@ public class KlijentController {
     public ResponseEntity<KlijentDto> updateKlijent(@RequestBody KlijentDto klijentDto) {
         return new ResponseEntity<>(klijentService.updateKlijent(klijentDto), HttpStatus.OK);
     }
+
+
+    @PostMapping("/register")
+    public ResponseEntity<KlijentDto> saveKlijent(@RequestBody KlijentCreateDto klijentCreateDto) {
+        return new ResponseEntity<>(klijentService.addKlijent(klijentCreateDto), HttpStatus.CREATED);
+    }
+
 }
