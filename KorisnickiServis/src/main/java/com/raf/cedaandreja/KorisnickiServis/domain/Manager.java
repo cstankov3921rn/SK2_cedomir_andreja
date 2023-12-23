@@ -14,6 +14,7 @@ public class Manager extends User{
     private Long id;
     private String nazivFiskulturneSale;
     private LocalDate datumZaposljavanja;
+    private boolean forbiden;
 
     public Long getId() {
         return id;
@@ -37,5 +38,13 @@ public class Manager extends User{
 
     public void setDatumZaposljavanja(LocalDate datumZaposljavanja) {
         this.datumZaposljavanja = datumZaposljavanja;
+    }
+
+    public boolean isForbiden() {
+        return forbiden;
+    }
+
+    public void setForbiden(boolean forbiden) {
+        this.forbiden = forbiden;
     }
 }

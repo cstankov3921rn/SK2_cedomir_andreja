@@ -2,7 +2,11 @@ package com.raf.cedaandreja.KorisnickiServis.controller;
 
 import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
+import com.raf.cedaandreja.KorisnickiServis.security.CheckSecurity;
 import com.raf.cedaandreja.KorisnickiServis.service.ManagerService;
+import org.hibernate.annotations.Check;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +24,7 @@ public class ManagerController {
     }
 
     @GetMapping("/all")
+    @CheckSecurity
     public ResponseEntity<List<ManagerDto>> getAll() {
         return new ResponseEntity<>(managerService.findAllManagers(), HttpStatus.OK);
     }
@@ -32,6 +37,11 @@ public class ManagerController {
     @PostMapping("/register")
     public ResponseEntity<ManagerDto> saveManager(@RequestBody ManagerCreateDto managerCreateDto) {
         return new ResponseEntity<>(managerService.addManager(managerCreateDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenResponseDto> loginManager(@RequestBody TokenRequestDto tokenRequestDto) {
+        return new ResponseEntity<>(managerService.login(tokenRequestDto), HttpStatus.OK);
     }
 
     @PutMapping

@@ -12,6 +12,7 @@ public class Klijent extends User{
     private Long id;
     private int brojClanskeKarte;
     private int brojZakazanihTreninga;
+    private boolean forbiden;
 
     public Long getId() {
         return id;
@@ -35,5 +36,13 @@ public class Klijent extends User{
 
     public void setBrojZakazanihTreninga(int brojZakazanihTreninga) {
         this.brojZakazanihTreninga = brojZakazanihTreninga;
+    }
+
+    public boolean isForbiden() {
+        return forbiden;
+    }
+
+    public void setForbiden(boolean forbiden) {
+        this.forbiden = forbiden;
     }
 }
