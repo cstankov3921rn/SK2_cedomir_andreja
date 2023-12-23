@@ -1,10 +1,9 @@
 package com.raf.cedaandreja.KorisnickiServis.controller;
 
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import com.raf.cedaandreja.KorisnickiServis.service.KlijentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,9 @@ public class KlijentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<KlijentDto>> getAll() {
-        return new ResponseEntity<>(klijentService.findAllKlijents(), HttpStatus.OK);
+    //@CheckSecurity
+    public ResponseEntity<Page<KlijentDto>> getAll(@RequestHeader("Authorization") String authorization, Pageable pageable) {
+        return new ResponseEntity<>(klijentService.findAllKlijents(pageable), HttpStatus.OK);
     }
 
     @GetMapping
@@ -45,5 +45,8 @@ public class KlijentController {
     public ResponseEntity<KlijentDto> saveKlijent(@RequestBody KlijentCreateDto klijentCreateDto) {
         return new ResponseEntity<>(klijentService.addKlijent(klijentCreateDto), HttpStatus.CREATED);
     }
-
+    @PostMapping("/login")
+    public ResponseEntity<TokenResponseDto> loginKlijent(@RequestBody TokenRequestDto tokenRequestDto) {
+        return new ResponseEntity<>(klijentService.login(tokenRequestDto), HttpStatus.OK);
+    }
 }
