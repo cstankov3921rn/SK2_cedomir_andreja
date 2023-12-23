@@ -7,6 +7,8 @@ import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
 import com.raf.cedaandreja.KorisnickiServis.security.CheckSecurity;
 import com.raf.cedaandreja.KorisnickiServis.service.ManagerService;
 import org.hibernate.annotations.Check;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +26,9 @@ public class ManagerController {
     }
 
     @GetMapping("/all")
-    @CheckSecurity
-    public ResponseEntity<List<ManagerDto>> getAll() {
-        return new ResponseEntity<>(managerService.findAllManagers(), HttpStatus.OK);
+    //@CheckSecurity
+    public ResponseEntity<Page<ManagerDto>> getAll(@RequestHeader("Authorization") String authorization, Pageable pageable) {
+        return new ResponseEntity<>(managerService.findAllManagers(pageable), HttpStatus.OK);
     }
 
     @GetMapping

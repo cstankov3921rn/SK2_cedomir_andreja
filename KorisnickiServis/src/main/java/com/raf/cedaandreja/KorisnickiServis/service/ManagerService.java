@@ -4,11 +4,13 @@ import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ManagerService {
-    List<ManagerDto> findAllManagers();
+    Page<ManagerDto> findAllManagers(Pageable pageable);
 
     ManagerDto findManager(String ime, String prezime);
 

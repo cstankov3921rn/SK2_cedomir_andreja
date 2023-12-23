@@ -11,6 +11,8 @@ import com.raf.cedaandreja.KorisnickiServis.mapper.ManagerMapper;
 import com.raf.cedaandreja.KorisnickiServis.repository.ManagerRepository;
 import com.raf.cedaandreja.KorisnickiServis.security.service.TokenService;
 import com.raf.cedaandreja.KorisnickiServis.service.ManagerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,8 +32,8 @@ public class ManagerServiceImpl implements ManagerService {
         this.tokenService = tokenService;
     }
     @Override
-    public List<ManagerDto> findAllManagers() {
-        return null;
+    public Page<ManagerDto> findAllManagers(Pageable pageable) {
+        return managerRepository.findAll(pageable).map(managerMapper::managerToManagerDto);
     }
 
     @Override
