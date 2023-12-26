@@ -65,9 +65,10 @@ public class KlijentServiceImpl implements KlijentService {
                         .format("User with username: %s and password: %s not found.", tokenRequestDto.getUsername(),
                                 tokenRequestDto.getPassword())));
         //Create token payload
+        //ubacimo if koje proverava da li je iskljucen, ako jeste salje neku poruku(error)
         Claims claims = Jwts.claims();
         claims.put("id", klijent.getId());
-        claims.put("role", klijent.getIme());
+        claims.put("role", "Klijent");
         //Generate token
         return new TokenResponseDto(tokenService.generate(claims));
     }

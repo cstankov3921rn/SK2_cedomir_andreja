@@ -1,6 +1,7 @@
 package com.raf.cedaandreja.KorisnickiServis.controller;
 
 import com.raf.cedaandreja.KorisnickiServis.dto.*;
+import com.raf.cedaandreja.KorisnickiServis.security.CheckSecurity;
 import com.raf.cedaandreja.KorisnickiServis.service.KlijentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public class KlijentController {
     }
 
     @GetMapping("/all")
-    //@CheckSecurity
+    @CheckSecurity(roles={"Klijent","Admin"})
     public ResponseEntity<Page<KlijentDto>> getAll(@RequestHeader("Authorization") String authorization, Pageable pageable) {
         return new ResponseEntity<>(klijentService.findAllKlijents(pageable), HttpStatus.OK);
     }
