@@ -63,7 +63,7 @@ public class ManagerServiceImpl implements ManagerService {
         //Create token payload
         Claims claims = Jwts.claims();
         claims.put("id", manager.getId());
-        claims.put("role", manager.getIme());
+        claims.put("role", "Manager");
         //Generate token
         return new TokenResponseDto(tokenService.generate(claims));
     }

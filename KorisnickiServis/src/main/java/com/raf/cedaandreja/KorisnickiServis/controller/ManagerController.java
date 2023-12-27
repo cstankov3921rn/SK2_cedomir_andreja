@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.controller;
 
+import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
@@ -26,7 +27,7 @@ public class ManagerController {
     }
 
     @GetMapping("/all")
-    //@CheckSecurity
+    @CheckSecurity(roles={"Admin","Manager"})
     public ResponseEntity<Page<ManagerDto>> getAll(@RequestHeader("Authorization") String authorization, Pageable pageable) {
         return new ResponseEntity<>(managerService.findAllManagers(pageable), HttpStatus.OK);
     }
