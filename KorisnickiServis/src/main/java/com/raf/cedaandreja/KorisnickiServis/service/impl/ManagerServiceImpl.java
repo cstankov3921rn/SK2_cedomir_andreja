@@ -2,10 +2,7 @@ package com.raf.cedaandreja.KorisnickiServis.service.impl;
 
 import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.domain.User;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import com.raf.cedaandreja.KorisnickiServis.exception.NotFoundException;
 import com.raf.cedaandreja.KorisnickiServis.mapper.ManagerMapper;
 import com.raf.cedaandreja.KorisnickiServis.repository.ManagerRepository;
@@ -17,7 +14,7 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
@@ -48,8 +45,12 @@ public class ManagerServiceImpl implements ManagerService {
         return managerMapper.managerToManagerDto((Manager) manager);
     }
     @Override
-    public ManagerDto updateManager(ManagerDto managerDto) {
-        return null;
+    public ManagerDto updateManager(ManagerUpdateDto managerUpdateDto) {
+        User manager = managerRepository.findManagerByUsername(managerUpdateDto.getOldUsername()).orElseThrow(()->new NotFoundException(String.format("User with username %s not found",managerUpdateDto.getOldUsername())));
+        manager = managerMapper.managerUpdateDtoToManager((Manager) manager, managerUpdateDto);
+        manager = managerRepository.save((Manager) manager);
+        return managerMapper.managerToManagerDto((Manager) manager);
+
     }
 
     @Override

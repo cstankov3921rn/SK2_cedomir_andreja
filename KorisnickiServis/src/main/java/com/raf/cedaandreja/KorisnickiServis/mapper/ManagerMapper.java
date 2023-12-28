@@ -4,6 +4,7 @@ import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.domain.User;
 import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.ManagerUpdateDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -34,5 +35,21 @@ public class ManagerMapper {
         ((Manager)manager).setDatumZaposljavanja(LocalDate.now());
         ((Manager)manager).setNazivFiskulturneSale(managerCreateDto.getNazivFiskulturneSale());
         return (Manager) manager;
+    }
+
+    public Manager managerUpdateDtoToManager(Manager manager, ManagerUpdateDto managerUpdateDto){
+        if(managerUpdateDto.getEmail()!=null)
+            manager.setEmail(managerUpdateDto.getEmail());
+        if(managerUpdateDto.getIme()!=null)
+            manager.setIme(managerUpdateDto.getIme());
+        if(managerUpdateDto.getPrezime()!=null)
+            manager.setPrezime(managerUpdateDto.getPrezime());
+        if(managerUpdateDto.getUsername()!=null)
+            manager.setUsername(managerUpdateDto.getUsername());
+        if(managerUpdateDto.getDatumRodjenja()!=null)
+            manager.setDatumRodjenja(managerUpdateDto.getDatumRodjenja());
+        if(managerUpdateDto.getNazivFiskulturneSale()!=null)
+            manager.setNazivFiskulturneSale(managerUpdateDto.getNazivFiskulturneSale());
+        return manager;
     }
 }

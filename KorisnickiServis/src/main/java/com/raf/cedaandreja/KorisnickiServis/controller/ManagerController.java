@@ -1,10 +1,7 @@
 package com.raf.cedaandreja.KorisnickiServis.controller;
 
 import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import com.raf.cedaandreja.KorisnickiServis.security.CheckSecurity;
 import com.raf.cedaandreja.KorisnickiServis.service.ManagerService;
 import org.hibernate.annotations.Check;
@@ -47,8 +44,9 @@ public class ManagerController {
         return new ResponseEntity<>(managerService.login(tokenRequestDto), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<ManagerDto> updateManager(@RequestBody ManagerDto managerDto) {
-        return new ResponseEntity<>(managerService.updateManager(managerDto), HttpStatus.OK);
+    @PutMapping("/update")
+    @CheckSecurity(roles={"Admin","Manager"})
+    public ResponseEntity<ManagerDto> updateManager(@RequestHeader("Authorization") String authorization, @RequestBody ManagerUpdateDto managerUpdateDto) {
+        return new ResponseEntity<>(managerService.updateManager(managerUpdateDto), HttpStatus.OK);
     }
 }

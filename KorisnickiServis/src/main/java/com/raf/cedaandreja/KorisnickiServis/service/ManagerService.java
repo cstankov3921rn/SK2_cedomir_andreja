@@ -1,9 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.service;
 
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,7 +13,7 @@ public interface ManagerService {
 
     ManagerDto addManager(ManagerCreateDto managerDto);
 
-    ManagerDto updateManager(ManagerDto managerDto);
+    ManagerDto updateManager(ManagerUpdateDto managerUpdateDto);
 
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 }
