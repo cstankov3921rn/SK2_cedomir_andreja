@@ -38,9 +38,18 @@ public class KlijentController {
     }
 
     @PutMapping("/update")
-    @CheckSecurity(roles={"Admin","Manager"})
+    @CheckSecurity(roles={"Admin","Klijent"})
     public ResponseEntity<KlijentDto> updateKlijent(@RequestHeader("Authorization") String authorization, @RequestBody KlijentUpdateDto klijentUpdateDto) {
         return new ResponseEntity<>(klijentService.updateKlijent(klijentUpdateDto), HttpStatus.OK);
+    }
+
+    @PutMapping("/forbiden")
+    @CheckSecurity(roles={"Admin"})
+    public ResponseEntity<KlijentDto> setForbidenKlijent(@RequestHeader("Authorization") String authorization, @RequestBody ForbidenTokenDto forbidenTokenDto) {
+        Boolean x;
+        if(forbidenTokenDto.getForbiden().matches("true"))x = true;
+        else x = false;
+        return new ResponseEntity<>(klijentService.setForbidenKlijent(forbidenTokenDto.getUsername(), x), HttpStatus.OK);
     }
 
     @PostMapping("/register")

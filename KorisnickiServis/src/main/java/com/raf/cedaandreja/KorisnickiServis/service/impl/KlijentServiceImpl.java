@@ -55,6 +55,15 @@ public class KlijentServiceImpl implements KlijentService {
         return klijentMapper.klijentToKlijentDto((Klijent) klijent);
 
     }
+
+
+    @Override
+    public KlijentDto setForbidenKlijent(String username, Boolean forbiden) {
+        User klijent = klijentRepository.findKlijentByUsername(username).orElseThrow(()->new NotFoundException(String.format("User with username %s not found",username)));
+        ((Klijent)klijent).setForbiden(forbiden);
+        klijent = klijentRepository.save((Klijent) klijent);
+        return klijentMapper.klijentToKlijentDto((Klijent) klijent);
+    }
     @Override
     public TokenResponseDto login(TokenRequestDto tokenRequestDto) {
         //Try to find active user for specified credentials
@@ -71,4 +80,5 @@ public class KlijentServiceImpl implements KlijentService {
         //Generate token
         return new TokenResponseDto(tokenService.generate(claims));
     }
+
 }
