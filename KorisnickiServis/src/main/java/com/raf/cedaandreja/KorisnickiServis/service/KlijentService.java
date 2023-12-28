@@ -1,9 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.service;
 
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,7 +13,7 @@ public interface KlijentService {
 
     KlijentDto addKlijent(KlijentCreateDto klijentCreateDto);
 
-    KlijentDto updateKlijent(KlijentDto klijentDto);
+    KlijentDto updateKlijent(KlijentUpdateDto klijentUpdateDto);
 
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 }

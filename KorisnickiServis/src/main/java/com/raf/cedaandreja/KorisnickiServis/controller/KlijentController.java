@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.controller;
 
+import com.raf.cedaandreja.KorisnickiServis.domain.Klijent;
 import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import com.raf.cedaandreja.KorisnickiServis.security.CheckSecurity;
 import com.raf.cedaandreja.KorisnickiServis.service.KlijentService;
@@ -36,11 +37,11 @@ public class KlijentController {
         return new ResponseEntity<>(klijentService.addKlijent(klijentCreateDto), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<KlijentDto> updateKlijent(@RequestBody KlijentDto klijentDto) {
-        return new ResponseEntity<>(klijentService.updateKlijent(klijentDto), HttpStatus.OK);
+    @PutMapping("/update")
+    @CheckSecurity(roles={"Admin","Manager"})
+    public ResponseEntity<KlijentDto> updateKlijent(@RequestHeader("Authorization") String authorization, @RequestBody KlijentUpdateDto klijentUpdateDto) {
+        return new ResponseEntity<>(klijentService.updateKlijent(klijentUpdateDto), HttpStatus.OK);
     }
-
 
     @PostMapping("/register")
     public ResponseEntity<KlijentDto> saveKlijent(@RequestBody KlijentCreateDto klijentCreateDto) {

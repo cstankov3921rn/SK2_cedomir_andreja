@@ -3,10 +3,7 @@ package com.raf.cedaandreja.KorisnickiServis.service.impl;
 import com.raf.cedaandreja.KorisnickiServis.domain.Klijent;
 import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.domain.User;
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import com.raf.cedaandreja.KorisnickiServis.exception.NotFoundException;
 import com.raf.cedaandreja.KorisnickiServis.mapper.KlijentMapper;
 import com.raf.cedaandreja.KorisnickiServis.repository.KlijentRepository;
@@ -51,11 +48,13 @@ public class KlijentServiceImpl implements KlijentService {
     }
 
     @Override
-    public KlijentDto updateKlijent(KlijentDto klijentDto) {
-        return null;
+    public KlijentDto updateKlijent(KlijentUpdateDto klijentUpdateDto) {
+        User klijent = klijentRepository.findKlijentByUsername(klijentUpdateDto.getOldUsername()).orElseThrow(()->new NotFoundException(String.format("User with username %s not found",klijentUpdateDto.getOldUsername())));
+        klijent = klijentMapper.klijentUpdateDtoToKlijent((Klijent) klijent, klijentUpdateDto);
+        klijent = klijentRepository.save((Klijent) klijent);
+        return klijentMapper.klijentToKlijentDto((Klijent) klijent);
+
     }
-
-
     @Override
     public TokenResponseDto login(TokenRequestDto tokenRequestDto) {
         //Try to find active user for specified credentials

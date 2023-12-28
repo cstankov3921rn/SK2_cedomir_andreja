@@ -3,9 +3,7 @@ package com.raf.cedaandreja.KorisnickiServis.mapper;
 import com.raf.cedaandreja.KorisnickiServis.domain.Klijent;
 import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.domain.User;
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentCreateDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.KlijentDto;
-import com.raf.cedaandreja.KorisnickiServis.dto.ManagerDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -35,5 +33,22 @@ public class KlijentMapper {
         ((Klijent)klijent).setBrojClanskeKarte(klijentCreateDto.getBrojClanskeKarte());
         ((Klijent)klijent).setBrojZakazanihTreninga(0);
         return (Klijent) klijent;
+    }
+
+
+    public Klijent klijentUpdateDtoToKlijent(Klijent klijent, KlijentUpdateDto klijentUpdateDto){
+        if(klijentUpdateDto.getEmail()!=null)
+            klijent.setEmail(klijentUpdateDto.getEmail());
+        if(klijentUpdateDto.getIme()!=null)
+            klijent.setIme(klijentUpdateDto.getIme());
+        if(klijentUpdateDto.getPrezime()!=null)
+            klijent.setPrezime(klijentUpdateDto.getPrezime());
+        if(klijentUpdateDto.getUsername()!=null)
+            klijent.setUsername(klijentUpdateDto.getUsername());
+        if(klijentUpdateDto.getDatumRodjenja()!=null)
+            klijent.setDatumRodjenja(klijentUpdateDto.getDatumRodjenja());
+        if(Integer.toString(klijentUpdateDto.getBrojClanskeKarte())!=null)
+            klijent.setBrojClanskeKarte(klijentUpdateDto.getBrojClanskeKarte());
+        return klijent;
     }
 }
