@@ -5,6 +5,8 @@ import java.time.LocalDate;
 public class KlijentUpdateDto {
     private String oldUsername;
     private String username;
+
+    private String password;
     private String email;
     private String ime;
     private String prezime;
@@ -65,5 +67,13 @@ public class KlijentUpdateDto {
 
     public void setBrojClanskeKarte(int brojClanskeKarte) {
         this.brojClanskeKarte = brojClanskeKarte;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

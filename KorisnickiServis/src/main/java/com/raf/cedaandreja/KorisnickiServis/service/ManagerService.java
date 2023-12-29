@@ -16,4 +16,6 @@ public interface ManagerService {
     ManagerDto updateManager(ManagerUpdateDto managerUpdateDto);
 
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
+
+    ManagerDto setForbidenManager(String username,Boolean forbiden);
 }

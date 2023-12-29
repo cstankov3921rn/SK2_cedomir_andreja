@@ -49,4 +49,13 @@ public class ManagerController {
     public ResponseEntity<ManagerDto> updateManager(@RequestHeader("Authorization") String authorization, @RequestBody ManagerUpdateDto managerUpdateDto) {
         return new ResponseEntity<>(managerService.updateManager(managerUpdateDto), HttpStatus.OK);
     }
+
+    @PutMapping("/forbiden")
+    @CheckSecurity(roles={"Admin"})
+    public ResponseEntity<ManagerDto> setForbidenManager(@RequestHeader("Authorization") String authorization, @RequestBody ForbidenTokenDto forbidenTokenDto) {
+        Boolean x;
+        if(forbidenTokenDto.getForbiden().matches("true"))x = true;
+        else x = false;
+        return new ResponseEntity<>(managerService.setForbidenManager(forbidenTokenDto.getUsername(), x), HttpStatus.OK);
+    }
 }

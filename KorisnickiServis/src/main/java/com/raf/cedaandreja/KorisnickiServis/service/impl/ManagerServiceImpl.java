@@ -3,6 +3,7 @@ package com.raf.cedaandreja.KorisnickiServis.service.impl;
 import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.domain.User;
 import com.raf.cedaandreja.KorisnickiServis.dto.*;
+import com.raf.cedaandreja.KorisnickiServis.exception.ForbiddenUserException;
 import com.raf.cedaandreja.KorisnickiServis.exception.NotFoundException;
 import com.raf.cedaandreja.KorisnickiServis.mapper.ManagerMapper;
 import com.raf.cedaandreja.KorisnickiServis.repository.ManagerRepository;
@@ -13,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-
-import java.util.Optional;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
@@ -62,10 +61,21 @@ public class ManagerServiceImpl implements ManagerService {
                         .format("User with username: %s and password: %s not found.", tokenRequestDto.getUsername(),
                                 tokenRequestDto.getPassword())));
         //Create token payload
+        if(manager.isForbiden()){
+            throw new ForbiddenUserException("Manager is forbidden");
+        }
         Claims claims = Jwts.claims();
         claims.put("id", manager.getId());
         claims.put("role", "Manager");
         //Generate token
         return new TokenResponseDto(tokenService.generate(claims));
+    }
+
+    @Override
+    public ManagerDto setForbidenManager(String username, Boolean forbiden) {
+        User manager = managerRepository.findManagerByUsername(username).orElseThrow(()->new NotFoundException(String.format("Manager with username %s not found",username)));
+        ((Manager)manager).setForbiden(forbiden);
+        manager = managerRepository.save((Manager) manager);
+        return managerMapper.managerToManagerDto((Manager) manager);
     }
 }

@@ -46,6 +46,8 @@ public class ManagerMapper {
             manager.setPrezime(managerUpdateDto.getPrezime());
         if(managerUpdateDto.getUsername()!=null)
             manager.setUsername(managerUpdateDto.getUsername());
+        if(managerUpdateDto.getPassword()!=null)
+            manager.setPassword(managerUpdateDto.getPassword());
         if(managerUpdateDto.getDatumRodjenja()!=null)
             manager.setDatumRodjenja(managerUpdateDto.getDatumRodjenja());
         if(managerUpdateDto.getNazivFiskulturneSale()!=null)

@@ -45,6 +45,8 @@ public class KlijentMapper {
             klijent.setPrezime(klijentUpdateDto.getPrezime());
         if(klijentUpdateDto.getUsername()!=null)
             klijent.setUsername(klijentUpdateDto.getUsername());
+        if(klijentUpdateDto.getPassword()!=null)
+            klijent.setPassword(klijentUpdateDto.getPassword());
         if(klijentUpdateDto.getDatumRodjenja()!=null)
             klijent.setDatumRodjenja(klijentUpdateDto.getDatumRodjenja());
         if(Integer.toString(klijentUpdateDto.getBrojClanskeKarte())!=null)
