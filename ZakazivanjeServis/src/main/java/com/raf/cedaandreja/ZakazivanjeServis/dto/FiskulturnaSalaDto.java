@@ -1,12 +1,17 @@
 package com.raf.cedaandreja.ZakazivanjeServis.dto;
 
+import com.raf.cedaandreja.ZakazivanjeServis.domain.TipTreninga;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class FiskulturnaSalaDto {
     private Long id;
     private String ime;
     private String opis;
     private String brojTrenera;
-    private String tipTreninga;
-    private String cena;
+
+    private List<TipTreninga> tipTreninga=new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -40,19 +45,11 @@ public class FiskulturnaSalaDto {
         this.brojTrenera = brojTrenera;
     }
 
-    public String getTipTreninga() {
+    public List<TipTreninga> getTipTreninga() {
         return tipTreninga;
     }
 
-    public void setTipTreninga(String tipTreninga) {
+    public void setTipTreninga(List<TipTreninga> tipTreninga) {
         this.tipTreninga = tipTreninga;
-    }
-
-    public String getCena() {
-        return cena;
-    }
-
-    public void setCena(String cena) {
-        this.cena = cena;
     }
 }

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface FiskulturnaSalaRepository extends JpaRepository<FiskulturnaSala, Long> {
     Optional<FiskulturnaSala> findFiskulturnaSalaByIme(String ime);
 
+    Optional<FiskulturnaSala> findFiskulturnaSalaById(Long id);
+
 }

@@ -1,9 +1,9 @@
 package com.raf.cedaandreja.ZakazivanjeServis.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class FiskulturnaSala {
@@ -13,8 +13,9 @@ public class FiskulturnaSala {
     private String ime;
     private String opis;
     private String brojTrenera;
-    private String tipTreninga;
-    private String cena;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fiskulturnaSala", orphanRemoval = true)
+    private List<TipTreninga> tipTreninga=new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -48,19 +49,11 @@ public class FiskulturnaSala {
         this.brojTrenera = brojTrenera;
     }
 
-    public String getTipTreninga() {
+    public List<TipTreninga> getTipTreninga() {
         return tipTreninga;
     }
 
-    public void setTipTreninga(String tipTreninga) {
+    public void setTipTreninga(List<TipTreninga> tipTreninga) {
         this.tipTreninga = tipTreninga;
-    }
-
-    public String getCena() {
-        return cena;
-    }
-
-    public void setCena(String cena) {
-        this.cena = cena;
     }
 }

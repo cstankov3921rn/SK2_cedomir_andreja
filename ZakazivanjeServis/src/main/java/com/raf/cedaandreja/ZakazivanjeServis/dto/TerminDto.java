@@ -1,37 +1,32 @@
-package com.raf.cedaandreja.ZakazivanjeServis.domain;
+package com.raf.cedaandreja.ZakazivanjeServis.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.raf.cedaandreja.ZakazivanjeServis.domain.FiskulturnaSala;
+import com.raf.cedaandreja.ZakazivanjeServis.domain.TipTreninga;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@Entity
-public class Termin {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TerminDto {
+
     private Long id;
-    @JsonIgnore
-    @ManyToOne
-    private FiskulturnaSala fiskulturnaSala;
-    @JsonIgnore
-    @ManyToOne
+    @JsonProperty("fiskulturnaSala")
+    private FiskulturnaSalaDto fiskulturnaSalaDto;
     private TipTreninga tipTreninga;
     private LocalDate datum;
     private LocalTime vremeOd;
     private LocalTime vremeDo;
-
-    private String dan;
     private boolean zauzet;
     private int maxBrojOsoba;
 
     private int trenutanBrojOsoba;
 
-    private String tip;
-//    @ManyToOne
-//    private Long SalaId;
+    private String dan;
 
     public Long getId() {
         return id;
@@ -39,6 +34,30 @@ public class Termin {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public FiskulturnaSalaDto getFiskulturnaSalaDto() {
+        return fiskulturnaSalaDto;
+    }
+
+    public void setFiskulturnaSalaDto(FiskulturnaSalaDto fiskulturnaSalaDto) {
+        this.fiskulturnaSalaDto = fiskulturnaSalaDto;
+    }
+
+    public TipTreninga getTipTreninga() {
+        return tipTreninga;
+    }
+
+    public void setTipTreninga(TipTreninga tipTreninga) {
+        this.tipTreninga = tipTreninga;
+    }
+
+    public LocalDate getDatum() {
+        return datum;
+    }
+
+    public void setDatum(LocalDate datum) {
+        this.datum = datum;
     }
 
     public LocalTime getVremeOd() {
@@ -65,44 +84,12 @@ public class Termin {
         this.zauzet = zauzet;
     }
 
-//    public Long getSalaId() {
-//        return SalaId;
-//    }
-//
-//    public void setSalaId(Long salaId) {
-//        SalaId = salaId;
-//    }
-
     public int getMaxBrojOsoba() {
         return maxBrojOsoba;
     }
 
     public void setMaxBrojOsoba(int maxBrojOsoba) {
         this.maxBrojOsoba = maxBrojOsoba;
-    }
-
-    public LocalDate getDatum() {
-        return datum;
-    }
-
-    public void setDatum(LocalDate datum) {
-        this.datum = datum;
-    }
-
-    public FiskulturnaSala getFiskulturnaSala() {
-        return fiskulturnaSala;
-    }
-
-    public void setFiskulturnaSala(FiskulturnaSala fiskulturnaSala) {
-        this.fiskulturnaSala = fiskulturnaSala;
-    }
-
-    public TipTreninga getTipTreninga() {
-        return tipTreninga;
-    }
-
-    public void setTipTreninga(TipTreninga tipTreninga) {
-        this.tipTreninga = tipTreninga;
     }
 
     public int getTrenutanBrojOsoba() {
@@ -119,13 +106,5 @@ public class Termin {
 
     public void setDan(String dan) {
         this.dan = dan;
-    }
-
-    public String getTip() {
-        return tip;
-    }
-
-    public void setTip(String tip) {
-        this.tip = tip;
     }
 }
