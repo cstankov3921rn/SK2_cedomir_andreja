@@ -1,7 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.controller;
 
-import com.raf.cedaandreja.KorisnickiServis.domain.Klijent;
-import com.raf.cedaandreja.KorisnickiServis.domain.User;
+
 import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import com.raf.cedaandreja.KorisnickiServis.security.CheckSecurity;
 import com.raf.cedaandreja.KorisnickiServis.service.KlijentService;
