@@ -1,14 +1,12 @@
-package com.raf.cedaandreja.ZakazivanjeServis.domain;
+package com.raf.cedaandreja.ZakazivanjeServis.dto;
 
-import jakarta.persistence.Entity;
+import com.raf.cedaandreja.ZakazivanjeServis.domain.Termin;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity
-public class Rezervacija {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RezervacijaDto {
+
     private Long id;
     private Long terminId;
     private Long userId;

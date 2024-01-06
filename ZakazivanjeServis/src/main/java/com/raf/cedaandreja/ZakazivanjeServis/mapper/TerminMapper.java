@@ -41,7 +41,6 @@ public class TerminMapper {
         termin.setTipTreninga(tipTreningaRepository.findById(terminCreateDto.getTipTreningaId())
                 .orElseThrow(() -> new NotFoundException(String
                         .format("Movie with id: %d does not exists.", terminCreateDto.getTipTreningaId()))));
-        System.out.println("AAAA"+terminCreateDto.getFiskulturnaSalaId());
         termin.setFiskulturnaSala(fiskulturnaSalaRepository.findById(terminCreateDto.getFiskulturnaSalaId())
                 .orElseThrow(() -> new NotFoundException(String
                         .format("Screen with id: %d does not exists.", terminCreateDto.getFiskulturnaSalaId()))));
