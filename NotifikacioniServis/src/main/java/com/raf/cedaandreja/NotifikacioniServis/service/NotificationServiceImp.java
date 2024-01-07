@@ -7,10 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Component
 public class NotificationServiceImp implements NotificationService {
@@ -24,7 +27,7 @@ public class NotificationServiceImp implements NotificationService {
         this.mailSender = mailSender;
         this.notificationRepository = notificationRepository;
     }
-
+    @Async
     @Override
     public void sendActivationEmail(String recipientEmail, String activationLink) {
         // Logika za slanje aktivacionog e-maila
@@ -36,11 +39,12 @@ public class NotificationServiceImp implements NotificationService {
 
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
-        notification.setRecipientEmail(recipientEmail);
+        notification.setKorisnik(recipientEmail);
         notification.setNotificationType("Aktivacioni e-mail");
         notification.setParameters("Activation Link: " + activationLink);
         notificationRepository.save(notification);
     }
+    @Async
     @Override
     public void sendLoginEmail(String recipientEmail, String activationLink) {
         // Logika za slanje aktivacionog e-maila
@@ -52,12 +56,12 @@ public class NotificationServiceImp implements NotificationService {
 
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
-        notification.setRecipientEmail(recipientEmail);
+        notification.setKorisnik(recipientEmail);
         notification.setNotificationType("Login e-mail");
         notification.setParameters("Login Link: " + activationLink);
         notificationRepository.save(notification);
     }
-
+    @Async
     @Override
     public void sendPasswordChangeEmail(String recipientEmail, String activationLink) {
         // Logika za slanje aktivacionog e-maila
@@ -69,29 +73,47 @@ public class NotificationServiceImp implements NotificationService {
 
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
-        notification.setRecipientEmail(recipientEmail);
+        notification.setKorisnik(recipientEmail);
         notification.setNotificationType("Promena sifre");
         notification.setParameters("Promena sifre Link: " + activationLink);
         notificationRepository.save(notification);
     }
-
+    @Async
     @Override
     public void sendReminderEmail(String recipientEmail, LocalDateTime vreme) {
-        // Logika za slanje aktivacionog e-maila
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(recipientEmail);
-        mailMessage.setSubject("Potvrda promene sifre");
-        mailMessage.setText("Pozdrav, podsetnik da imate trening " + vreme);
-        mailSender.send(mailMessage);
 
-        // Čuvanje poslate notifikacije
-        Notification notification = new Notification();
-        notification.setRecipientEmail(recipientEmail);
-        notification.setNotificationType("Podsetnik");
-        notification.setParameters("Vreme treninga: " + vreme);
-        notificationRepository.save(notification);
+
+
+        Timer timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+
+                // Logika za slanje aktivacionog e-maila
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(recipientEmail);
+                mailMessage.setSubject("Potvrda promene sifre");
+                mailMessage.setText("Pozdrav, podsetnik da imate trening " + vreme);
+                mailSender.send(mailMessage);
+
+                // Čuvanje poslate notifikacije
+                Notification notification = new Notification();
+                notification.setKorisnik(recipientEmail);
+                notification.setNotificationType("Podsetnik");
+                notification.setParameters("Vreme treninga: " + vreme);
+                notificationRepository.save(notification);
+
+                System.out.println("Akcija se izvršava na datum: " + vreme);
+            }
+        };
+        Date d = new Date();
+        d.setYear(vreme.getYear());
+        d.setMonth(vreme.getMonthValue());
+        d.setDate(vreme.getDayOfMonth());
+        timer.schedule(task,d);
     }
-
+    @Async
     @Override
     public void sendCancelEmail(String recipientEmailK,String recipientEmailM, LocalDateTime vreme) {
         // Logika za slanje aktivacionog e-maila
@@ -109,12 +131,12 @@ public class NotificationServiceImp implements NotificationService {
 
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
-        notification.setRecipientEmail(recipientEmailK);
+        notification.setKorisnik(recipientEmailK);
         notification.setNotificationType("Otkazivanje");
         notification.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification);
     }
-
+    @Async
     @Override
     public void sendScheduleEmail(String recipientEmailK, String recipientEmailM, LocalDateTime vreme) {
         // Logika za slanje aktivacionog e-maila
@@ -133,12 +155,12 @@ public class NotificationServiceImp implements NotificationService {
 
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
-        notification.setRecipientEmail(recipientEmailK);
+        notification.setKorisnik(recipientEmailK);
         notification.setNotificationType("Zakazivanje");
         notification.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification);
     }
-
+    @Async
     @Override
     public Page<Notification> findAllNotification(Pageable pageable) {
         return notificationRepository.findAll(pageable);

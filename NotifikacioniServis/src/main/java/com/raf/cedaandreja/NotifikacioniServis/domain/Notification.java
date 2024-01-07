@@ -13,7 +13,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String recipientEmail;
+    private String korisnik;
 
     private String notificationType;
 
@@ -27,12 +27,12 @@ public class Notification {
         this.id = id;
     }
 
-    public String getRecipientEmail() {
-        return recipientEmail;
+    public String getKorisnik() {
+        return korisnik;
     }
 
-    public void setRecipientEmail(String recipientEmail) {
-        this.recipientEmail = recipientEmail;
+    public void setKorisnik(String korisnik) {
+        this.korisnik = korisnik;
     }
 
     public String getNotificationType() {

@@ -3,16 +3,16 @@ package com.raf.cedaandreja.NotifikacioniServis.Dto;
 import java.util.Map;
 
 public class NotificationDto {
-    private String koirisnik;
+    private String korisnik;
     private String type;
     private Map<String,String> extra;
 
-    public String getKoirisnik() {
-        return koirisnik;
+    public String getKorisnik() {
+        return korisnik;
     }
 
-    public void setKoirisnik(String koirisnik) {
-        this.koirisnik = koirisnik;
+    public void setKorisnik(String korisnik) {
+        this.korisnik = korisnik;
     }
 
     public String getType() {
@@ -29,5 +29,14 @@ public class NotificationDto {
 
     public void setExtra(Map<String, String> extra) {
         this.extra = extra;
+    }
+
+    @Override
+    public String toString() {
+        return "NotificationDto{" +
+                "koirisnik='" + korisnik + '\'' +
+                ", type='" + type + '\'' +
+                ", extra=" + extra +
+                '}';
     }
 }
