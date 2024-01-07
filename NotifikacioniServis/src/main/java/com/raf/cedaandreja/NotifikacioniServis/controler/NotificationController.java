@@ -1,6 +1,7 @@
 package com.raf.cedaandreja.NotifikacioniServis.controler;
 
 import com.raf.cedaandreja.NotifikacioniServis.domain.Notification;
+import com.raf.cedaandreja.NotifikacioniServis.security.CheckSecurity;
 import com.raf.cedaandreja.NotifikacioniServis.service.NotificationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,7 @@ public class NotificationController {
         }
 
     @GetMapping("/all")
+    @CheckSecurity(roles={"Admin"})
     public ResponseEntity<Page<Notification>> getAll( Pageable pageable) {
         return new ResponseEntity<>(notificationService.findAllNotification(pageable), HttpStatus.OK);
     }

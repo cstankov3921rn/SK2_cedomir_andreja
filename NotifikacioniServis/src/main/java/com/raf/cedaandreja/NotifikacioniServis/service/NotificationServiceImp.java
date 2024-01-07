@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@EnableAsync
 @Component
 public class NotificationServiceImp implements NotificationService {
 
@@ -135,6 +137,13 @@ public class NotificationServiceImp implements NotificationService {
         notification.setNotificationType("Otkazivanje");
         notification.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification);
+
+
+        Notification notification1 = new Notification();
+        notification1.setKorisnik(recipientEmailM);
+        notification1.setNotificationType("Otkazivanje");
+        notification1.setParameters("Vreme treninga: " + vreme);
+        notificationRepository.save(notification1);
     }
     @Async
     @Override
@@ -159,6 +168,12 @@ public class NotificationServiceImp implements NotificationService {
         notification.setNotificationType("Zakazivanje");
         notification.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification);
+
+        Notification notification1 = new Notification();
+        notification1.setKorisnik(recipientEmailM);
+        notification1.setNotificationType("Zakazivanje");
+        notification1.setParameters("Vreme treninga: " + vreme);
+        notificationRepository.save(notification1);
     }
     @Async
     @Override
