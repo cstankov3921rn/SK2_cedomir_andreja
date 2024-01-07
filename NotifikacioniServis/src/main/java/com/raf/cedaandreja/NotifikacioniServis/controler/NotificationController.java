@@ -48,8 +48,23 @@ public class NotificationController {
 
     @GetMapping("/all")
     @CheckSecurity(roles={"Admin"})
-    public ResponseEntity<Page<Notification>> getAll( Pageable pageable) {
+    public ResponseEntity<Page<Notification>> getAll(@RequestHeader("Authorization") String authorization, Pageable pageable) {
         return new ResponseEntity<>(notificationService.findAllNotification(pageable), HttpStatus.OK);
     }
+    @GetMapping("/alltype")
+    @CheckSecurity(roles={"Admin"})
+    public ResponseEntity<Page<Notification>> getNotificationByType(@RequestHeader("Authorization") String authorization,@RequestParam String type, Pageable pageable) {
+        return new ResponseEntity<>(notificationService.findAllNotificationsByType(type,pageable), HttpStatus.OK);
+    }
+    @GetMapping("/my")
+    @CheckSecurity(roles={"Admin","Manager","Klijent"})
+    public ResponseEntity<Page<Notification>> getNotificationByKorisnik(@RequestHeader("Authorization") String authorization, @RequestBody String korisnik, Pageable pageable) {
+        return new ResponseEntity<>(notificationService.findAllNotificationsByKorisnik(korisnik,pageable), HttpStatus.OK);
+    }
 
+    @GetMapping("/myfilter")
+    @CheckSecurity(roles={"Admin","Manager","Klijent"})
+    public ResponseEntity<Page<Notification>> getNotificationByKorisnikAndType(@RequestHeader("Authorization") String authorization, @RequestParam String korisnik,@RequestParam String type, Pageable pageable) {
+        return new ResponseEntity<>(notificationService.findAllNotificationsByKorisnikAndType(korisnik,type,pageable), HttpStatus.OK);
+    }
 }

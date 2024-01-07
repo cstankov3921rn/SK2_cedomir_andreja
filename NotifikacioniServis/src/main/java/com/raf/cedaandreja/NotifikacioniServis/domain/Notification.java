@@ -15,7 +15,7 @@ public class Notification {
 
     private String korisnik;
 
-    private String notificationType;
+    private String type;
 
     private String parameters;
 
@@ -35,12 +35,12 @@ public class Notification {
         this.korisnik = korisnik;
     }
 
-    public String getNotificationType() {
-        return notificationType;
+    public String getType() {
+        return type;
     }
 
-    public void setNotificationType(String notificationType) {
-        this.notificationType = notificationType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getParameters() {

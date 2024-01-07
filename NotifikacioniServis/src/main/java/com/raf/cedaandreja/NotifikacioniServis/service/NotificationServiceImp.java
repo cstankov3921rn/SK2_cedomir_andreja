@@ -42,7 +42,7 @@ public class NotificationServiceImp implements NotificationService {
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
         notification.setKorisnik(recipientEmail);
-        notification.setNotificationType("Aktivacioni e-mail");
+        notification.setType("Aktivacioni e-mail");
         notification.setParameters("Activation Link: " + activationLink);
         notificationRepository.save(notification);
     }
@@ -59,7 +59,7 @@ public class NotificationServiceImp implements NotificationService {
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
         notification.setKorisnik(recipientEmail);
-        notification.setNotificationType("Login e-mail");
+        notification.setType("Login e-mail");
         notification.setParameters("Login Link: " + activationLink);
         notificationRepository.save(notification);
     }
@@ -76,7 +76,7 @@ public class NotificationServiceImp implements NotificationService {
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
         notification.setKorisnik(recipientEmail);
-        notification.setNotificationType("Promena sifre");
+        notification.setType("Promena sifre");
         notification.setParameters("Promena sifre Link: " + activationLink);
         notificationRepository.save(notification);
     }
@@ -102,7 +102,7 @@ public class NotificationServiceImp implements NotificationService {
                 // Čuvanje poslate notifikacije
                 Notification notification = new Notification();
                 notification.setKorisnik(recipientEmail);
-                notification.setNotificationType("Podsetnik");
+                notification.setType("Podsetnik");
                 notification.setParameters("Vreme treninga: " + vreme);
                 notificationRepository.save(notification);
 
@@ -134,14 +134,14 @@ public class NotificationServiceImp implements NotificationService {
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
         notification.setKorisnik(recipientEmailK);
-        notification.setNotificationType("Otkazivanje");
+        notification.setType("Otkazivanje");
         notification.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification);
 
 
         Notification notification1 = new Notification();
         notification1.setKorisnik(recipientEmailM);
-        notification1.setNotificationType("Otkazivanje");
+        notification1.setType("Otkazivanje");
         notification1.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification1);
     }
@@ -165,13 +165,13 @@ public class NotificationServiceImp implements NotificationService {
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
         notification.setKorisnik(recipientEmailK);
-        notification.setNotificationType("Zakazivanje");
+        notification.setType("Zakazivanje");
         notification.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification);
 
         Notification notification1 = new Notification();
         notification1.setKorisnik(recipientEmailM);
-        notification1.setNotificationType("Zakazivanje");
+        notification1.setType("Zakazivanje");
         notification1.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification1);
     }
@@ -179,5 +179,20 @@ public class NotificationServiceImp implements NotificationService {
     @Override
     public Page<Notification> findAllNotification(Pageable pageable) {
         return notificationRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Notification> findAllNotificationsByType(String type, Pageable pageable) {
+        return notificationRepository.findAllNotificationsByType(pageable,type);
+    }
+
+    @Override
+    public Page<Notification> findAllNotificationsByKorisnik(String email, Pageable pageable) {
+        return notificationRepository.findAllNotificationsByKorisnik(pageable,email);
+    }
+
+    @Override
+    public Page<Notification> findAllNotificationsByKorisnikAndType(String korisnik, String type, Pageable pageable) {
+        return notificationRepository.findAllNotificationsByKorisnikAndType(pageable,korisnik,type);
     }
 }
