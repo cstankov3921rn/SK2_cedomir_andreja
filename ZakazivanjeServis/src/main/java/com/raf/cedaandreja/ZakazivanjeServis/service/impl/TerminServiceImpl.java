@@ -44,8 +44,8 @@ public class TerminServiceImpl implements TerminService {
     }
 
     @Override
-    public TerminDto findDan(String dan) {
-        return terminRepository.findTerminByDan(dan).map(terminMapper::terminToTerminDto).orElseThrow(()-> new NotFoundException(String.format("Nema termina tog dana")));
+    public Page<TerminDto> findDan(String dan, Pageable pageable) {
+        return terminRepository.findTerminByDan(dan,pageable).map(terminMapper::terminToTerminDto);
     }
 
     @Override
@@ -54,8 +54,8 @@ public class TerminServiceImpl implements TerminService {
     }
 
     @Override
-    public TerminDto findTip(String individualni) {
-        return terminRepository.findTerminByTip(individualni).map(terminMapper::terminToTerminDto).orElseThrow(()-> new NotFoundException(String.format("Nema tog tipa")));
+    public Page<TerminDto> findTip(String individualni,Pageable pageable) {
+        return terminRepository.findTerminByTip(individualni,pageable).map(terminMapper::terminToTerminDto);
     }
 
     @Override

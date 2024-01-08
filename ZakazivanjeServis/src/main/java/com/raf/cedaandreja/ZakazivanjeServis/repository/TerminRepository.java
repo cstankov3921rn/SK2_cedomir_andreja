@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface TerminRepository extends JpaRepository<Termin,Long> {
 
-    Optional<Termin> findTerminByDan(String dan);
+    Page<Termin> findTerminByDan(String dan,Pageable pageable);
 
-    Optional<Termin> findTerminByTip(String tip);
+    Page<Termin> findTerminByTip(String tip,Pageable pageable);
 
     Page<Termin> findAllByOrderByVremeOd(Pageable pageable);
 

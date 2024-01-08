@@ -34,14 +34,14 @@ public class TerminController {
 
     @GetMapping("/dan")
     @CheckSecurity(roles={"Klijent","Manager"})
-    public ResponseEntity<TerminDto> findPoDanu(@RequestHeader("Authorization") String authorization, @RequestParam String dan) {
-        return new ResponseEntity<>(terminService.findDan(dan), HttpStatus.OK);
+    public ResponseEntity<Page<TerminDto>> findPoDanu(@RequestHeader("Authorization") String authorization, @RequestParam String dan,Pageable pageable) {
+        return new ResponseEntity<>(terminService.findDan(dan,pageable), HttpStatus.OK);
     }
 
     @GetMapping("/tip")
     @CheckSecurity(roles={"Klijent","Manager"})
-    public ResponseEntity<TerminDto> findPoTipu(@RequestHeader("Authorization") String authorization, @RequestParam String tip) {
-        return new ResponseEntity<>(terminService.findTip(tip), HttpStatus.OK);
+    public ResponseEntity<Page<TerminDto>> findPoTipu(@RequestHeader("Authorization") String authorization, @RequestParam String tip,Pageable pageable) {
+        return new ResponseEntity<>(terminService.findTip(tip,pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
