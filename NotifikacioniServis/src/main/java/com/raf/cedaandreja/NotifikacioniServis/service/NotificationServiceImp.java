@@ -112,7 +112,7 @@ public class NotificationServiceImp implements NotificationService {
         Date d = new Date();
         d.setYear(vreme.getYear());
         d.setMonth(vreme.getMonthValue());
-        d.setDate(vreme.getDayOfMonth());
+        d.setDate(vreme.getDayOfMonth()-1);
         timer.schedule(task,d);
     }
     @Async

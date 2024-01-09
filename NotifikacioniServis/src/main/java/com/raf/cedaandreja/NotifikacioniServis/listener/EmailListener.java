@@ -16,9 +16,6 @@ import java.time.LocalDateTime;
 @EnableAsync
 @Component
 public class EmailListener {
-//TODO idi u picku materinu moram da zamenim Controler sa ovim listenerem i da ubacim ovde
-// switch kako bih mogo da razlikujem koja je poruka u pitanj. i takodje da naucim ovaj nacin
-// pozivanja tojes postavljanja zahteva
     private MessageHelper messageHelper;
     private NotificationService emailService;
 
