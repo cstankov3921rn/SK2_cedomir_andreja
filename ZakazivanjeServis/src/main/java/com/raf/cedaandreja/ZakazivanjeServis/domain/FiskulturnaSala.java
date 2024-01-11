@@ -14,6 +14,8 @@ public class FiskulturnaSala {
     private String opis;
     private String brojTrenera;
 
+    private String besplatanTrening;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fiskulturnaSala", orphanRemoval = true)
     private List<TipTreninga> tipTreninga=new ArrayList<>();
 
@@ -55,5 +57,13 @@ public class FiskulturnaSala {
 
     public void setTipTreninga(List<TipTreninga> tipTreninga) {
         this.tipTreninga = tipTreninga;
+    }
+
+    public String getBesplatanTrening() {
+        return besplatanTrening;
+    }
+
+    public void setBesplatanTrening(String besplatanTrening) {
+        this.besplatanTrening = besplatanTrening;
     }
 }

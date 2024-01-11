@@ -18,4 +18,10 @@ public interface KlijentService {
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 
     KlijentDto setForbidenKlijent(String username,Boolean forbiden);
+
+    void povecajBrojZakazanihTermina(Long klijentId);
+
+    void smanjiBrojZakazanihTermina(Long klijentId);
+
+    int getBrojZakazanihTermina(Long klijentId);
 }

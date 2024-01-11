@@ -61,6 +61,27 @@ public class KlijentServiceImpl implements KlijentService {
         klijent = klijentRepository.save((Klijent) klijent);
         return klijentMapper.klijentToKlijentDto((Klijent) klijent);
     }
+
+    @Override
+    public void povecajBrojZakazanihTermina(Long klijentId) {
+        User klijent = klijentRepository.findById(klijentId).orElseThrow(()->new NotFoundException(String.format("User with given id not found")));
+        ((Klijent)klijent).setBrojZakazanihTreninga(((Klijent)klijent).getBrojZakazanihTreninga()+1);
+        klijent = klijentRepository.save((Klijent) klijent);
+    }
+
+    @Override
+    public void smanjiBrojZakazanihTermina(Long klijentId) {
+        User klijent = klijentRepository.findById(klijentId).orElseThrow(()->new NotFoundException(String.format("User with given id not found")));
+        ((Klijent)klijent).setBrojZakazanihTreninga(((Klijent)klijent).getBrojZakazanihTreninga()-1);
+        klijent = klijentRepository.save((Klijent) klijent);
+    }
+
+    @Override
+    public int getBrojZakazanihTermina(Long klijentId) {
+        User klijent = klijentRepository.findById(klijentId).orElseThrow(()->new NotFoundException(String.format("User with given id not found")));
+        return ((Klijent)klijent).getBrojZakazanihTreninga();
+    }
+
     @Override
     public TokenResponseDto login(TokenRequestDto tokenRequestDto) {
         //Try to find active user for specified credentials
