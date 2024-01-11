@@ -29,10 +29,18 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     @Override
     public RezervacijaDto rezervisi(RezervacijaCreateDto rezervacijaCreateDto) {
         Rezervacija rezervacija = rezervacijaMapper.rezervacijaCreateDtoToRezervacija(rezervacijaCreateDto);
-        rezervacijaRepository.save(rezervacija);
         Termin termin = terminRepository.findById(rezervacija.getTerminId()).orElseThrow(()->new NotFoundException(String.format("Termin sa id-jem %s nije nadjen",rezervacija.getTerminId())));
-        termin.setZauzet(true);
+        if(termin.getTipTreninga().getTip().equals("grupni") && termin.getTrenutanBrojOsoba()<termin.getMaxBrojOsoba()){
+            termin.setTrenutanBrojOsoba(termin.getTrenutanBrojOsoba()+1);
+            if(termin.getTrenutanBrojOsoba()==termin.getMaxBrojOsoba())
+                termin.setZauzet(true);
+        }else if(termin.getTipTreninga().getTip().equals("individualni") && !termin.isZauzet()){
+            termin.setZauzet(true);
+        }else{
+            return null;
+        }
         terminRepository.save(termin);
+        rezervacijaRepository.save(rezervacija);
         return rezervacijaMapper.rezervacijaToRezervacijaDto(rezervacija);
     }
 
@@ -46,7 +54,14 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     @Override
     public void otkaziKlijent(Long id) {
         Termin termin = terminRepository.findById(rezervacijaRepository.findById(id).get().getTerminId()).orElseThrow(()->new NotFoundException(String.format("Termin sa id-jem %s nije nadjen",rezervacijaRepository.findById(id).get().getTerminId())));
-        termin.setZauzet(false);
+        if(termin.getTipTreninga().getTip().equals("grupni")){
+            termin.setTrenutanBrojOsoba(termin.getTrenutanBrojOsoba()-1);
+            termin.setZauzet(false);
+        }else if(termin.getTipTreninga().getTip().equals("individualni")){
+            termin.setZauzet(false);
+        }else{
+            return;
+        }
         terminRepository.save(termin);
         rezervacijaRepository.delete(rezervacijaRepository.findById(id).get());
     }

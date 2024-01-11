@@ -12,11 +12,11 @@ public interface TerminService {
 
     TerminDto add(TerminCreateDto projectionCreateDto);
 
-    TerminDto findDan(String dan);
+    Page<TerminDto> findDan(String dan,Pageable pageable);
 
     void deleteById(Long id);
 
-    TerminDto findTip(String individualni);
+    Page<TerminDto> findTip(String individualni,Pageable pageable);
 
     Page<TerminDto> findAllSorted(Pageable pageable);
 }
