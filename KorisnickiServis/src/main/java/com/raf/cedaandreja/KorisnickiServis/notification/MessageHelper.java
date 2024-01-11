@@ -1,17 +1,13 @@
-package com.raf.cedaandreja.NotifikacioniServis.listener.helper;
+package com.raf.cedaandreja.KorisnickiServis.notification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.raf.cedaandreja.NotifikacioniServis.Dto.NotificationDto;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
 import jakarta.jms.TextMessage;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
-
 
 import java.io.IOException;
 import java.util.Set;
@@ -22,27 +18,27 @@ public class MessageHelper {
 
     private Validator validator;
     private ObjectMapper objectMapper;
-    private JmsTemplate jmsTemplate;
 
-    public MessageHelper(Validator validator, ObjectMapper objectMapper, JmsTemplate jmsTemplate) {
+    public MessageHelper(Validator validator, ObjectMapper objectMapper) {
         this.validator = validator;
         this.objectMapper = objectMapper;
-        this.jmsTemplate = jmsTemplate;
     }
 
     public <T> T getMessage(Message message, Class<T> clazz) throws RuntimeException, JMSException {
-        String json = ((TextMessage) message).getText();
-        System.out.println(json);
-
-        // Deserijalizuj JSON u objekat NotificationDto
         try {
-            NotificationDto notificationDto = objectMapper.readValue(json, NotificationDto.class);
-            return (T) notificationDto;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            String json = ((TextMessage) message).getText();
+            T data = objectMapper.readValue(json, clazz);
+
+            Set<ConstraintViolation<T>> violations = validator.validate(data);
+            if (violations.isEmpty()) {
+                return data;
+            }
+
+            printViolationsAndThrowException(violations);
+            return null;
+        } catch (IOException exception) {
+            throw new RuntimeException("Message parsing fails.", exception);
         }
-
-
     }
 
     public String createTextMessage(Object object) {

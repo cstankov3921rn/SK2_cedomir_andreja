@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.service.impl;
 
+import com.raf.cedaandreja.KorisnickiServis.notification.NotificationApi;
 import com.raf.cedaandreja.KorisnickiServis.domain.Klijent;
 import com.raf.cedaandreja.KorisnickiServis.domain.User;
 import com.raf.cedaandreja.KorisnickiServis.dto.*;
@@ -20,11 +21,13 @@ public class KlijentServiceImpl implements KlijentService {
     private KlijentRepository klijentRepository;
     private KlijentMapper klijentMapper;
     private TokenService tokenService;
+    private NotificationApi notificationApi;
 
-    public KlijentServiceImpl(KlijentRepository klijentRepository, KlijentMapper klijentMapper, TokenService tokenService) {
+    public KlijentServiceImpl(KlijentRepository klijentRepository, KlijentMapper klijentMapper, TokenService tokenService, NotificationApi notificationApi) {
         this.klijentRepository = klijentRepository;
         this.klijentMapper = klijentMapper;
         this.tokenService = tokenService;
+        this.notificationApi = notificationApi;
     }
 
     @Override
@@ -41,7 +44,19 @@ public class KlijentServiceImpl implements KlijentService {
     public KlijentDto addKlijent(KlijentCreateDto klijentCreateDto) {
         User klijent = klijentMapper.klijentCreateDtoToKlijent(klijentCreateDto);
         klijentRepository.save((Klijent) klijent);
+        Claims claims = Jwts.claims();
+        claims.put("id", ((Klijent)klijent).getId());
+        claims.put("role", "Klijent");
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(klijent.getEmail());
+        nt.setType("activation");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+
         return klijentMapper.klijentToKlijentDto((Klijent) klijent);
+
     }
 
     @Override
@@ -49,6 +64,18 @@ public class KlijentServiceImpl implements KlijentService {
         User klijent = klijentRepository.findKlijentByUsername(klijentUpdateDto.getOldUsername()).orElseThrow(()->new NotFoundException(String.format("User with username %s not found",klijentUpdateDto.getOldUsername())));
         klijent = klijentMapper.klijentUpdateDtoToKlijent((Klijent) klijent, klijentUpdateDto);
         klijent = klijentRepository.save((Klijent) klijent);
+
+        Claims claims = Jwts.claims();
+        claims.put("id", ((Klijent)klijent).getId());
+        claims.put("role", "Klijent");
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(klijent.getEmail());
+        nt.setType("update");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+
         return klijentMapper.klijentToKlijentDto((Klijent) klijent);
 
     }
@@ -98,8 +125,41 @@ public class KlijentServiceImpl implements KlijentService {
         Claims claims = Jwts.claims();
         claims.put("id", klijent.getId());
         claims.put("role", "Klijent");
-        //Generate token
-        return new TokenResponseDto(tokenService.generate(claims));
-    }
 
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(klijent.getEmail());
+        nt.setType("login");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+
+        return tr;
+    }
+    @Override
+    public KlijentDto updatePasswordKlijent(UpdatePaswordDto updatePaswordDto) {
+        Klijent klijent = klijentRepository
+                .findKlijentByUsernameAndPassword(updatePaswordDto.getUsername(), updatePaswordDto.getOldPass())
+                .orElseThrow(() -> new NotFoundException(String
+                        .format("User with username: %s and password: %s not found.", updatePaswordDto.getUsername(),
+                                updatePaswordDto.getOldPass())));
+        //Create token payload
+        if(klijent.isForbiden()){
+            throw new ForbiddenUserException("Klijent is forbidden");
+        }
+        Claims claims = Jwts.claims();
+        claims.put("id", klijent.getId());
+        claims.put("role", "Klijent");
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+
+
+        nt.setKorisnik(klijent.getEmail());
+        nt.setType("passwordChange");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+        klijent.setPassword(updatePaswordDto.getNewPass());
+        return klijentMapper.klijentToKlijentDto(klijent);
+    }
 }

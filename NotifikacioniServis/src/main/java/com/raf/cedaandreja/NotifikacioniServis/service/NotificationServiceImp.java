@@ -117,19 +117,14 @@ public class NotificationServiceImp implements NotificationService {
     }
     @Async
     @Override
-    public void sendCancelEmail(String recipientEmailK,String recipientEmailM, LocalDateTime vreme) {
+    public void sendCancelEmail(String recipientEmailK, LocalDateTime vreme) {
         // Logika za slanje aktivacionog e-maila
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(recipientEmailK);
         mailMessage.setSubject("Potvrda otkazivanja treninga");
         mailMessage.setText("Pozdrav, ovo je potvrda da ste uspesno otkazali trening " + vreme);
         mailSender.send(mailMessage);
-        //za menadjera
-        SimpleMailMessage mailMessage1 = new SimpleMailMessage();
-        mailMessage1.setTo(recipientEmailM);
-        mailMessage1.setSubject("Potvrda zakazivanja treninga");
-        mailMessage1.setText("Pozdrav, ovo je potvrda da se je neko odkazao prijavu za trening " + vreme);
-        mailSender.send(mailMessage1);
+
 
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
@@ -139,15 +134,10 @@ public class NotificationServiceImp implements NotificationService {
         notificationRepository.save(notification);
 
 
-        Notification notification1 = new Notification();
-        notification1.setKorisnik(recipientEmailM);
-        notification1.setType("Otkazivanje");
-        notification1.setParameters("Vreme treninga: " + vreme);
-        notificationRepository.save(notification1);
     }
     @Async
     @Override
-    public void sendScheduleEmail(String recipientEmailK, String recipientEmailM, LocalDateTime vreme) {
+    public void sendScheduleEmail(String recipientEmailK, LocalDateTime vreme) {
         // Logika za slanje aktivacionog e-maila
         //za klijenta
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -155,12 +145,7 @@ public class NotificationServiceImp implements NotificationService {
         mailMessage.setSubject("Potvrda zakazivanja treninga");
         mailMessage.setText("Pozdrav, ovo je potvrda da ste uspesno zakazali trening " + vreme);
         mailSender.send(mailMessage);
-        //za menadjera
-        SimpleMailMessage mailMessage1 = new SimpleMailMessage();
-        mailMessage1.setTo(recipientEmailM);
-        mailMessage1.setSubject("Potvrda zakazivanja treninga");
-        mailMessage1.setText("Pozdrav, ovo je potvrda da se jos neko prijavio na trening " + vreme);
-        mailSender.send(mailMessage1);
+
 
         // Čuvanje poslate notifikacije
         Notification notification = new Notification();
@@ -169,11 +154,6 @@ public class NotificationServiceImp implements NotificationService {
         notification.setParameters("Vreme treninga: " + vreme);
         notificationRepository.save(notification);
 
-        Notification notification1 = new Notification();
-        notification1.setKorisnik(recipientEmailM);
-        notification1.setType("Zakazivanje");
-        notification1.setParameters("Vreme treninga: " + vreme);
-        notificationRepository.save(notification1);
     }
     @Async
     @Override
@@ -194,5 +174,22 @@ public class NotificationServiceImp implements NotificationService {
     @Override
     public Page<Notification> findAllNotificationsByKorisnikAndType(String korisnik, String type, Pageable pageable) {
         return notificationRepository.findAllNotificationsByKorisnikAndType(pageable,korisnik,type);
+    }
+
+    @Override
+    public void sendUpdateEmail(String korisnik, String link) {
+        // Logika za slanje aktivacionog e-maila
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(korisnik);
+        mailMessage.setSubject("Potvrda izmena profila");
+        mailMessage.setText("Pozdrav, ovo je potvrda da ste uspesno izmenili svoj profil link: " + link);
+        mailSender.send(mailMessage);
+
+        // Čuvanje poslate notifikacije
+        Notification notification = new Notification();
+        notification.setKorisnik(korisnik);
+        notification.setType("Izmena profila");
+        notification.setParameters("Potvrda izmene profila Link: " + link);
+        notificationRepository.save(notification);
     }
 }

@@ -4,8 +4,6 @@ import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface ManagerService {
     Page<ManagerDto> findAllManagers(Pageable pageable);
 
@@ -14,6 +12,8 @@ public interface ManagerService {
     ManagerDto addManager(ManagerCreateDto managerDto);
 
     ManagerDto updateManager(ManagerUpdateDto managerUpdateDto);
+
+    ManagerDto updatePasswordMagager(UpdatePaswordDto updatePaswordDto);
 
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 

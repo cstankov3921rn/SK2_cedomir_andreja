@@ -1,13 +1,13 @@
 package com.raf.cedaandreja.KorisnickiServis.service.impl;
 
+import com.raf.cedaandreja.KorisnickiServis.notification.NotificationApi;
 import com.raf.cedaandreja.KorisnickiServis.domain.Admin;
-import com.raf.cedaandreja.KorisnickiServis.domain.Klijent;
 import com.raf.cedaandreja.KorisnickiServis.dto.AdminDto;
+import com.raf.cedaandreja.KorisnickiServis.dto.NotificationDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.TokenRequestDto;
 import com.raf.cedaandreja.KorisnickiServis.dto.TokenResponseDto;
 import com.raf.cedaandreja.KorisnickiServis.exception.NotFoundException;
 import com.raf.cedaandreja.KorisnickiServis.repository.AdminRepository;
-import com.raf.cedaandreja.KorisnickiServis.repository.KlijentRepository;
 import com.raf.cedaandreja.KorisnickiServis.security.service.TokenService;
 import com.raf.cedaandreja.KorisnickiServis.service.AdminService;
 import io.jsonwebtoken.Claims;
@@ -18,11 +18,13 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService {
     private AdminRepository adminRepository;
     private TokenService tokenService;
+    private NotificationApi notificationApi;
     //mapper
 
-    public AdminServiceImpl(AdminRepository adminRepository, TokenService tokenService) {
+    public AdminServiceImpl(AdminRepository adminRepository, TokenService tokenService, NotificationApi notificationApi) {
         this.adminRepository = adminRepository;
         this.tokenService = tokenService;
+        this.notificationApi = notificationApi;
     }
 
     @Override
@@ -45,6 +47,12 @@ public class AdminServiceImpl implements AdminService {
         claims.put("id", admin.getId());
         claims.put("role", "Admin");
         //Generate token
-        return new TokenResponseDto(tokenService.generate(claims));
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(admin.getEmail());
+        nt.setType("login");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+        return tr;
     }
 }

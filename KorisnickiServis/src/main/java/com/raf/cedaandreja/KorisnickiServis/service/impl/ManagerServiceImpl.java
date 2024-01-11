@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.service.impl;
 
+import com.raf.cedaandreja.KorisnickiServis.notification.NotificationApi;
 import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.domain.User;
 import com.raf.cedaandreja.KorisnickiServis.dto.*;
@@ -21,12 +22,15 @@ public class ManagerServiceImpl implements ManagerService {
     private ManagerRepository managerRepository;
     private ManagerMapper managerMapper;
     private TokenService tokenService;
+    private NotificationApi notificationApi;
 
-    public ManagerServiceImpl(ManagerRepository managerRepository,  ManagerMapper managerMapper, TokenService tokenService){
-        this.managerRepository=managerRepository;
-        this.managerMapper=managerMapper;
+    public ManagerServiceImpl(ManagerRepository managerRepository, ManagerMapper managerMapper, TokenService tokenService, NotificationApi notificationApi) {
+        this.managerRepository = managerRepository;
+        this.managerMapper = managerMapper;
         this.tokenService = tokenService;
+        this.notificationApi = notificationApi;
     }
+
     @Override
     public Page<ManagerDto> findAllManagers(Pageable pageable) {
         return managerRepository.findAll(pageable).map(managerMapper::managerToManagerDto);
@@ -41,15 +45,69 @@ public class ManagerServiceImpl implements ManagerService {
     public ManagerDto addManager(ManagerCreateDto managerCreateDto) {
         User manager = managerMapper.managerCreateDtoToManager(managerCreateDto);
         managerRepository.save((Manager) manager);
+
+        Claims claims = Jwts.claims();
+        claims.put("id", ((Manager)manager).getId());
+        claims.put("role", "Manager");
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(manager.getEmail());
+        nt.setType("activation");
+        nt.setLink(tr.getToken());
+        System.out.println("Poslat zahtev");
+        notificationApi.sendNotification(nt);
+
+
         return managerMapper.managerToManagerDto((Manager) manager);
+
     }
     @Override
     public ManagerDto updateManager(ManagerUpdateDto managerUpdateDto) {
         User manager = managerRepository.findManagerByUsername(managerUpdateDto.getOldUsername()).orElseThrow(()->new NotFoundException(String.format("User with username %s not found",managerUpdateDto.getOldUsername())));
         manager = managerMapper.managerUpdateDtoToManager((Manager) manager, managerUpdateDto);
         manager = managerRepository.save((Manager) manager);
+
+        Claims claims = Jwts.claims();
+        claims.put("id", ((Manager)manager).getId());
+        claims.put("role", "Manager");
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(manager.getEmail());
+        nt.setType("update");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+
         return managerMapper.managerToManagerDto((Manager) manager);
 
+    }
+
+    @Override
+    public ManagerDto updatePasswordMagager(UpdatePaswordDto updatePaswordDto) {
+        Manager manager = managerRepository
+                .findManagerByUsernameAndPassword(updatePaswordDto.getUsername(), updatePaswordDto.getOldPass())
+                .orElseThrow(() -> new NotFoundException(String
+                        .format("User with username: %s and password: %s not found.", updatePaswordDto.getUsername(),
+                                updatePaswordDto.getOldPass())));
+        //Create token payload
+        if(manager.isForbiden()){
+            throw new ForbiddenUserException("Manager is forbidden");
+        }
+        Claims claims = Jwts.claims();
+        claims.put("id", manager.getId());
+        claims.put("role", "Manager");
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+
+
+        nt.setKorisnik(manager.getEmail());
+        nt.setType("passwordChange");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+        manager.setPassword(updatePaswordDto.getNewPass());
+        return managerMapper.managerToManagerDto((Manager) manager);
     }
 
     @Override
@@ -67,8 +125,15 @@ public class ManagerServiceImpl implements ManagerService {
         Claims claims = Jwts.claims();
         claims.put("id", manager.getId());
         claims.put("role", "Manager");
-        //Generate token
-        return new TokenResponseDto(tokenService.generate(claims));
+
+        TokenResponseDto tr = new TokenResponseDto(tokenService.generate(claims));
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(manager.getEmail());
+        nt.setType("login");
+        nt.setLink(tr.getToken());
+        notificationApi.sendNotification(nt);
+
+        return tr;
     }
 
     @Override

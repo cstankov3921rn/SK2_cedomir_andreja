@@ -13,8 +13,8 @@ public interface NotificationService {
     void sendLoginEmail(String recipientEmail, String activationLink);
     void sendPasswordChangeEmail(String recipientEmail, String activationLink);
     void sendReminderEmail(String recipientEmail, LocalDateTime vreme);
-    void sendCancelEmail(String recipientEmailK,String recipientEmailM, LocalDateTime vreme);
-    void sendScheduleEmail(String recipientEmailK, String recipientEmailM, LocalDateTime vreme);
+    void sendCancelEmail(String recipientEmailK, LocalDateTime vreme);
+    void sendScheduleEmail(String recipientEmailK, LocalDateTime vreme);
 
     Page<Notification> findAllNotification(Pageable pageable);
     Page<Notification> findAllNotificationsByKorisnik(String email, Pageable pageable);
@@ -22,4 +22,6 @@ public interface NotificationService {
     Page<Notification> findAllNotificationsByKorisnikAndType(String korisnik, String type, Pageable pageable);
 
     Page<Notification> findAllNotificationsByType(String type, Pageable pageable);
+
+    void sendUpdateEmail(String korisnik, String link);
 }

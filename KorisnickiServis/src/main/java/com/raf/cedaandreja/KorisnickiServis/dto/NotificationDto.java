@@ -1,4 +1,4 @@
-package com.raf.cedaandreja.NotifikacioniServis.Dto;
+package com.raf.cedaandreja.KorisnickiServis.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,6 +25,7 @@ public class NotificationDto {
             e.printStackTrace(); // Handle the exception appropriately
         }
     }
+
     public String getKorisnik() {
         return korisnik;
     }

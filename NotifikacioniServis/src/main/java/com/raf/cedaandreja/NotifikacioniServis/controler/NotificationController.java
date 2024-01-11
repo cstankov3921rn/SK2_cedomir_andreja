@@ -38,12 +38,12 @@ public class NotificationController {
             notificationService.sendReminderEmail(email, vreme);
         }
         @PostMapping("/cancel-email")
-        public void sendOtkazivanjeEmail(@RequestParam String emailK, @RequestParam String emailM, @RequestParam LocalDateTime vreme) {
-            notificationService.sendCancelEmail(emailK, emailM, vreme);
+        public void sendOtkazivanjeEmail(@RequestParam String emailK, @RequestParam LocalDateTime vreme) {
+            notificationService.sendCancelEmail(emailK, vreme);
         }
         @PostMapping("/schedule-email")
-        public void sendZakazivanjeEmail(@RequestParam String emailK,@RequestParam String emailM, @RequestParam LocalDateTime vreme) {
-        notificationService.sendScheduleEmail(emailK,emailM, vreme);
+        public void sendZakazivanjeEmail(@RequestParam String emailK, @RequestParam LocalDateTime vreme) {
+        notificationService.sendScheduleEmail(emailK, vreme);
         }
 
     @GetMapping("/all")

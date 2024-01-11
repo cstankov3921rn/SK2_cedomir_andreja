@@ -25,32 +25,38 @@ public class EmailListener {
     }
 
     @Async
-    @JmsListener(destination = "${destination.sendEmails}", concurrency = "5-10")
+    @JmsListener(destination = "notificationQueue", concurrency = "5-10")
     public void addOrder(Message message) throws JMSException {
+        System.out.println(message);
         NotificationDto notificationDto = messageHelper.getMessage(message, NotificationDto.class);
+        System.out.println("Stigo zahtev");
         switch (notificationDto.getType()){
             case "activation":{
-                emailService.sendActivationEmail(notificationDto.getKorisnik(),notificationDto.getExtra().get("link"));
+                emailService.sendActivationEmail(notificationDto.getKorisnik(),notificationDto.getLink());
                 break;
             }
             case "login":{
-                emailService.sendLoginEmail(notificationDto.getKorisnik(),notificationDto.getExtra().get("link"));
+                emailService.sendLoginEmail(notificationDto.getKorisnik(),notificationDto.getLink());
+                break;
+            }
+            case "update":{
+                emailService.sendUpdateEmail(notificationDto.getKorisnik(),notificationDto.getLink());
                 break;
             }
             case "passwordChange":{
-                emailService.sendPasswordChangeEmail(notificationDto.getKorisnik(),notificationDto.getExtra().get("link"));
+                emailService.sendPasswordChangeEmail(notificationDto.getKorisnik(),notificationDto.getLink());
                 break;
             }
             case "reminder":{
-                emailService.sendReminderEmail(notificationDto.getKorisnik(), LocalDateTime.parse(notificationDto.getExtra().get("vreme")));
+                emailService.sendReminderEmail(notificationDto.getKorisnik(), LocalDateTime.parse(notificationDto.getLink()));
                 break;
             }
             case "cancel":{
-                emailService.sendCancelEmail(notificationDto.getKorisnik(),notificationDto.getExtra().get("menagerEmail"), LocalDateTime.parse(notificationDto.getExtra().get("vreme")));
+                emailService.sendCancelEmail(notificationDto.getKorisnik(), LocalDateTime.parse(notificationDto.getLink()));
                 break;
             }
             case "schedule":{
-                emailService.sendScheduleEmail(notificationDto.getKorisnik(),notificationDto.getExtra().get("menagerEmail"), LocalDateTime.parse(notificationDto.getExtra().get("vreme")));
+                emailService.sendScheduleEmail(notificationDto.getKorisnik(), LocalDateTime.parse(notificationDto.getLink()));
                 break;
             }
         }

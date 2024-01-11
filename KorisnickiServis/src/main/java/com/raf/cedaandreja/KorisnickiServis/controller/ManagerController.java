@@ -50,6 +50,12 @@ public class ManagerController {
         return new ResponseEntity<>(managerService.updateManager(managerUpdateDto), HttpStatus.OK);
     }
 
+    @PutMapping("/updatepasword")
+    @CheckSecurity(roles={"Admin","Manager"})
+    public ResponseEntity<ManagerDto> updatePaswordManager(@RequestHeader("Authorization") String authorization, @RequestBody UpdatePaswordDto updatePaswordDto) {
+        return new ResponseEntity<>(managerService.updatePasswordMagager(updatePaswordDto), HttpStatus.OK);
+    }
+
     @PutMapping("/forbiden")
     @CheckSecurity(roles={"Admin"})
     public ResponseEntity<ManagerDto> setForbidenManager(@RequestHeader("Authorization") String authorization, @RequestBody ForbidenTokenDto forbidenTokenDto) {

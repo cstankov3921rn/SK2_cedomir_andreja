@@ -15,6 +15,8 @@ public interface KlijentService {
 
     KlijentDto updateKlijent(KlijentUpdateDto klijentUpdateDto);
 
+    KlijentDto updatePasswordKlijent(UpdatePaswordDto updatePaswordDto);
+
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 
     KlijentDto setForbidenKlijent(String username,Boolean forbiden);
