@@ -13,6 +13,8 @@ public class FiskulturnaSalaUpdateDto {
     private String opis;
     private String brojTrenera;
 
+    private String besplatanTrening;
+
     private List<TipTreninga> tipTreninga=new ArrayList<>();
 
     public Long getId() {
@@ -61,5 +63,13 @@ public class FiskulturnaSalaUpdateDto {
 
     public void setStaroIme(String staroIme) {
         this.staroIme = staroIme;
+    }
+
+    public String getBesplatanTrening() {
+        return besplatanTrening;
+    }
+
+    public void setBesplatanTrening(String besplatanTrening) {
+        this.besplatanTrening = besplatanTrening;
     }
 }

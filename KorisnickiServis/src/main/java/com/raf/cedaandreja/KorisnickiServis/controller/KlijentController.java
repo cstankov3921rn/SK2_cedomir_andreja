@@ -60,4 +60,22 @@ public class KlijentController {
     public ResponseEntity<TokenResponseDto> loginKlijent(@RequestBody TokenRequestDto tokenRequestDto) {
         return new ResponseEntity<>(klijentService.login(tokenRequestDto), HttpStatus.OK);
     }
+
+    @PostMapping("/{klijentId}/povecajBrojZakazanihTermina")
+    public ResponseEntity<Void> povecajBrojZakazanihTermina(@PathVariable Long klijentId) {
+        klijentService.povecajBrojZakazanihTermina(klijentId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{klijentId}/smanjiBrojZakazanihTermina")
+    public ResponseEntity<Void> smanjiBrojZakazanihTermina(@PathVariable Long klijentId) {
+        klijentService.smanjiBrojZakazanihTermina(klijentId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{klijentId}/brojZakazanihTermina")
+    public ResponseEntity<Integer> getBrojZakazanihTermina(@PathVariable Long klijentId) {
+        int brojZakazanihTermina = klijentService.getBrojZakazanihTermina(klijentId);
+        return ResponseEntity.ok(brojZakazanihTermina);
+    }
 }
