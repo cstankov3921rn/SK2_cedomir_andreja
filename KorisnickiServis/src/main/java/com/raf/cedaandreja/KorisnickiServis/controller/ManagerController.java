@@ -29,10 +29,15 @@ public class ManagerController {
         return new ResponseEntity<>(managerService.findAllManagers(pageable), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<ManagerDto> getManager(@RequestParam String ime, @RequestParam String prezime) {
-        return new ResponseEntity<>(managerService.findManager(ime, prezime), HttpStatus.OK);
+    @GetMapping("/{managerId}")
+    public ResponseEntity<ManagerDto> getManagerId(@PathVariable Long managerId) {
+        return new ResponseEntity<>(managerService.findManagerId(managerId), HttpStatus.OK);
     }
+
+//    @GetMapping
+//    public ResponseEntity<ManagerDto> getManager(@RequestParam String ime, @RequestParam String prezime) {
+//        return new ResponseEntity<>(managerService.findManager(ime, prezime), HttpStatus.OK);
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<ManagerDto> saveManager(@RequestBody ManagerCreateDto managerCreateDto) {

@@ -17,6 +17,8 @@ public class FiskulturnaSalaUpdateDto {
 
     private List<TipTreninga> tipTreninga=new ArrayList<>();
 
+    private String managerId;
+
     public Long getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class FiskulturnaSalaUpdateDto {
 
     public void setBesplatanTrening(String besplatanTrening) {
         this.besplatanTrening = besplatanTrening;
+    }
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
     }
 }

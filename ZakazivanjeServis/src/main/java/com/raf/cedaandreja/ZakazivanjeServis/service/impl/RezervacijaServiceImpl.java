@@ -2,14 +2,17 @@ package com.raf.cedaandreja.ZakazivanjeServis.service.impl;
 
 import com.raf.cedaandreja.ZakazivanjeServis.domain.Rezervacija;
 import com.raf.cedaandreja.ZakazivanjeServis.domain.Termin;
+import com.raf.cedaandreja.ZakazivanjeServis.dto.NotificationDto;
 import com.raf.cedaandreja.ZakazivanjeServis.dto.RezervacijaCreateDto;
 import com.raf.cedaandreja.ZakazivanjeServis.dto.RezervacijaDto;
 import com.raf.cedaandreja.ZakazivanjeServis.exception.NotFoundException;
 import com.raf.cedaandreja.ZakazivanjeServis.mapper.RezervacijaMapper;
+import com.raf.cedaandreja.ZakazivanjeServis.notification.NotificationApi;
 import com.raf.cedaandreja.ZakazivanjeServis.repository.RezervacijaRepository;
 import com.raf.cedaandreja.ZakazivanjeServis.repository.TerminRepository;
 import com.raf.cedaandreja.ZakazivanjeServis.service.RezervacijaService;
 import com.raf.cedaandreja.ZakazivanjeServis.userservice.dto.KlijentDto;
+import com.raf.cedaandreja.ZakazivanjeServis.userservice.dto.ManagerDto;
 import io.github.resilience4j.retry.Retry;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
 
 @Service
 public class RezervacijaServiceImpl implements RezervacijaService {
@@ -31,12 +36,15 @@ public class RezervacijaServiceImpl implements RezervacijaService {
 
     private Retry userServiceRetry;
 
-    public RezervacijaServiceImpl(RezervacijaRepository rezervacijaRepository, RezervacijaMapper rezervacijaMapper, TerminRepository terminRepository,RestTemplate userServiceRestTemplate,Retry userServiceRetry) {
+    private NotificationApi notificationApi;;
+
+    public RezervacijaServiceImpl(RezervacijaRepository rezervacijaRepository, RezervacijaMapper rezervacijaMapper, TerminRepository terminRepository,RestTemplate userServiceRestTemplate,Retry userServiceRetry,NotificationApi notificationApi) {
         this.rezervacijaRepository = rezervacijaRepository;
         this.rezervacijaMapper = rezervacijaMapper;
         this.terminRepository = terminRepository;
         this.userServiceRestTemplate=userServiceRestTemplate;
         this.userServiceRetry=userServiceRetry;
+        this.notificationApi=notificationApi;
     }
 
     @Override
@@ -60,6 +68,21 @@ public class RezervacijaServiceImpl implements RezervacijaService {
         }
         terminRepository.save(termin);
         rezervacijaRepository.save(rezervacija);
+        ResponseEntity<KlijentDto> klijentDtoResponseEntity2 = userServiceRestTemplate.exchange("/klijent/"+rezervacijaCreateDto.getUserId(),HttpMethod.GET,null, KlijentDto.class);
+        String klijentEmail = klijentDtoResponseEntity2.getBody().getEmail();
+        ResponseEntity<ManagerDto> managerDtoResponseEntity = userServiceRestTemplate.exchange("/manager/"+termin.getFiskulturnaSala().getManagerId(), HttpMethod.GET,null, ManagerDto.class);
+        String managerEmail = managerDtoResponseEntity.getBody().getEmail();
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(klijentEmail);
+        nt.setType("schedule");
+        LocalDateTime datumvreme = LocalDateTime.of(termin.getDatum().getYear(),termin.getDatum().getMonth(),termin.getDatum().getDayOfMonth(),termin.getVremeOd().getHour(),termin.getVremeOd().getMinute());
+        nt.setLink(datumvreme.toString());
+        notificationApi.sendNotification(nt);
+        NotificationDto nt2 = new NotificationDto();
+        nt2.setKorisnik(managerEmail);
+        nt2.setType("schedule");
+        nt2.setLink(datumvreme.toString());
+        notificationApi.sendNotification(nt2);
         return rezervacijaMapper.rezervacijaToRezervacijaDto(rezervacija);
     }
 
@@ -81,6 +104,23 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     public void otkaziManager(Long id) {
         Termin termin = terminRepository.findById(rezervacijaRepository.findById(id).get().getTerminId()).orElseThrow(()->new NotFoundException(String.format("Termin sa id-jem %s nije nadjen",rezervacijaRepository.findById(id).get().getTerminId())));
         ResponseEntity<KlijentDto> klijentDtoResponseEntity = userServiceRestTemplate.exchange("/klijent/"+rezervacijaRepository.findById(id).get().getUserId()+"/smanjiBrojZakazanihTermina", HttpMethod.POST,null,KlijentDto.class);
+
+        ResponseEntity<KlijentDto> klijentDtoResponseEntity2 = userServiceRestTemplate.exchange("/klijent/"+rezervacijaRepository.findById(id).get().getUserId(),HttpMethod.GET,null, KlijentDto.class);
+        String klijentEmail = klijentDtoResponseEntity2.getBody().getEmail();
+        ResponseEntity<ManagerDto> managerDtoResponseEntity = userServiceRestTemplate.exchange("/manager/"+termin.getFiskulturnaSala().getManagerId(), HttpMethod.GET,null, ManagerDto.class);
+        String managerEmail = managerDtoResponseEntity.getBody().getEmail();
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(klijentEmail);
+        nt.setType("cancel");
+        LocalDateTime datumvreme = LocalDateTime.of(termin.getDatum().getYear(),termin.getDatum().getMonth(),termin.getDatum().getDayOfMonth(),termin.getVremeOd().getHour(),termin.getVremeOd().getMinute());
+        nt.setLink(datumvreme.toString());
+        notificationApi.sendNotification(nt);
+        NotificationDto nt2 = new NotificationDto();
+        nt2.setKorisnik(managerEmail);
+        nt2.setType("cancel");
+        nt2.setLink(datumvreme.toString());
+        notificationApi.sendNotification(nt2);
+
         terminRepository.delete(termin);
         rezervacijaRepository.delete(rezervacijaRepository.findById(id).get());
     }
@@ -97,6 +137,23 @@ public class RezervacijaServiceImpl implements RezervacijaService {
             return;
         }
         ResponseEntity<KlijentDto> klijentDtoResponseEntity = userServiceRestTemplate.exchange("/klijent/"+rezervacijaRepository.findById(id).get().getUserId()+"/smanjiBrojZakazanihTermina", HttpMethod.POST,null,KlijentDto.class);
+
+        ResponseEntity<KlijentDto> klijentDtoResponseEntity2 = userServiceRestTemplate.exchange("/klijent/"+rezervacijaRepository.findById(id).get().getUserId(),HttpMethod.GET,null, KlijentDto.class);
+        String klijentEmail = klijentDtoResponseEntity2.getBody().getEmail();
+        ResponseEntity<ManagerDto> managerDtoResponseEntity = userServiceRestTemplate.exchange("/manager/"+termin.getFiskulturnaSala().getManagerId(), HttpMethod.GET,null, ManagerDto.class);
+        String managerEmail = managerDtoResponseEntity.getBody().getEmail();
+        NotificationDto nt = new NotificationDto();
+        nt.setKorisnik(klijentEmail);
+        nt.setType("cancel");
+        LocalDateTime datumvreme = LocalDateTime.of(termin.getDatum().getYear(),termin.getDatum().getMonth(),termin.getDatum().getDayOfMonth(),termin.getVremeOd().getHour(),termin.getVremeOd().getMinute());
+        nt.setLink(datumvreme.toString());
+        notificationApi.sendNotification(nt);
+        NotificationDto nt2 = new NotificationDto();
+        nt2.setKorisnik(managerEmail);
+        nt2.setType("cancel");
+        nt2.setLink(datumvreme.toString());
+        notificationApi.sendNotification(nt2);
+
         terminRepository.save(termin);
         rezervacijaRepository.delete(rezervacijaRepository.findById(id).get());
     }

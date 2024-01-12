@@ -26,4 +26,6 @@ public interface KlijentService {
     void smanjiBrojZakazanihTermina(Long klijentId);
 
     int getBrojZakazanihTermina(Long klijentId);
+
+    KlijentDto findKlijentId(Long klijentId);
 }

@@ -18,4 +18,6 @@ public interface ManagerService {
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 
     ManagerDto setForbidenManager(String username,Boolean forbiden);
+
+    ManagerDto findManagerId(Long managerId);
 }

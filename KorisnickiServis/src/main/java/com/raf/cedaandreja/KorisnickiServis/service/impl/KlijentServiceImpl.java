@@ -16,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class KlijentServiceImpl implements KlijentService {
     private KlijentRepository klijentRepository;
@@ -107,6 +109,12 @@ public class KlijentServiceImpl implements KlijentService {
     public int getBrojZakazanihTermina(Long klijentId) {
         User klijent = klijentRepository.findById(klijentId).orElseThrow(()->new NotFoundException(String.format("User with given id not found")));
         return ((Klijent)klijent).getBrojZakazanihTreninga();
+    }
+
+    @Override
+    public KlijentDto findKlijentId(Long klijentId) {
+        User klijent = klijentRepository.findById(klijentId).get();
+        return klijentMapper.klijentToKlijentDto((Klijent)klijent);
     }
 
     @Override

@@ -27,10 +27,15 @@ public class KlijentController {
         return new ResponseEntity<>(klijentService.findAllKlijents(pageable), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<KlijentDto> getKlijent(@RequestParam String ime, @RequestParam String prezime) {
-        return new ResponseEntity<>(klijentService.findKlijent(ime, prezime), HttpStatus.OK);
+    @GetMapping("/{klijentId}")
+    public ResponseEntity<KlijentDto> getKlijentId(@PathVariable Long klijentId) {
+        return new ResponseEntity<>(klijentService.findKlijentId(klijentId), HttpStatus.OK);
     }
+
+//    @GetMapping
+//    public ResponseEntity<KlijentDto> getKlijent(@RequestParam String ime, @RequestParam String prezime) {
+//        return new ResponseEntity<>(klijentService.findKlijent(ime, prezime), HttpStatus.OK);
+//    }
 
     @PostMapping
     public ResponseEntity<KlijentDto> addKlijent(@RequestBody KlijentCreateDto klijentCreateDto) {

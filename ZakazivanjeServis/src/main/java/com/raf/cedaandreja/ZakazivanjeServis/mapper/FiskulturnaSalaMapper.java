@@ -20,6 +20,7 @@ public class FiskulturnaSalaMapper {
         fiskulturnaSalaDto.setBrojTrenera(fiskulturnaSala.getBrojTrenera());
         fiskulturnaSalaDto.setTipTreninga(fiskulturnaSalaDto.getTipTreninga());
         fiskulturnaSalaDto.setBesplatanTrening(fiskulturnaSalaDto.getBesplatanTrening());
+        fiskulturnaSalaDto.setManagerId(fiskulturnaSalaDto.getManagerId());
         return fiskulturnaSalaDto;
     }
 
@@ -31,6 +32,7 @@ public class FiskulturnaSalaMapper {
         fiskulturnaSala.setBrojTrenera(fiskulturnaSalaDto.getBrojTrenera());
         fiskulturnaSala.setTipTreninga(fiskulturnaSalaDto.getTipTreninga());
         fiskulturnaSala.setBesplatanTrening(fiskulturnaSalaDto.getBesplatanTrening());
+        fiskulturnaSala.setManagerId(fiskulturnaSalaDto.getManagerId());
         return fiskulturnaSala;
     }
 
@@ -43,6 +45,8 @@ public class FiskulturnaSalaMapper {
             fiskulturnaSala.setOpis(fiskulturnaSalaUpdateDto.getOpis());
         if(fiskulturnaSalaUpdateDto.getBesplatanTrening()!=null)
             fiskulturnaSala.setBesplatanTrening(fiskulturnaSalaUpdateDto.getBesplatanTrening());
+        if(fiskulturnaSalaUpdateDto.getManagerId()!=null)
+            fiskulturnaSala.setManagerId(fiskulturnaSalaUpdateDto.getManagerId());
 //        if (fiskulturnaSalaUpdateDto.getTipTreninga() != null) {
 //            fiskulturnaSala.getTipTreninga().clear();
 //            fiskulturnaSala.setTipTreninga(fiskulturnaSalaUpdateDto.getTipTreninga());

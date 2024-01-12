@@ -143,4 +143,10 @@ public class ManagerServiceImpl implements ManagerService {
         manager = managerRepository.save((Manager) manager);
         return managerMapper.managerToManagerDto((Manager) manager);
     }
+
+    @Override
+    public ManagerDto findManagerId(Long managerId) {
+        User manager = managerRepository.findById(managerId).get();
+        return managerMapper.managerToManagerDto((Manager)manager);
+    }
 }
