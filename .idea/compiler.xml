@@ -8,17 +8,16 @@
         <outputRelativeToContentRoot value="true" />
         <module name="ZakazivanjeServis" />
         <module name="KorisnickiServis" />
+        <module name="EurekaServis" />
+        <module name="ApiGateway" />
         <module name="NotifikacioniServis" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="KorisnickiServis" target="17" />
-      <module name="NotifikacioniServis" target="17" />
-      <module name="ZakazivanjeServis" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ApiGateway" options="-parameters" />
+      <module name="EurekaServis" options="-parameters" />
       <module name="KorisnickiServis" options="-parameters" />
       <module name="NotifikacioniServis" options="-parameters" />
       <module name="ZakazivanjeServis" options="-parameters" />
