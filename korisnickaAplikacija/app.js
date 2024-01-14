@@ -5,7 +5,10 @@ const app = express();
 const BP = require('body-parser');
 const Joi = require('joi');
 const fs=require('fs');
-
+app.use((req, res, next) => {
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
 
 
 app.use( express.static( path.join(__dirname, 'static') ) );
