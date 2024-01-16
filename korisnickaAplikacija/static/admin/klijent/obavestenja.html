@@ -23,14 +23,16 @@
         if (userDataString) {
           // Pretvaranje JSON stringa u objekat
           const userData = JSON.parse(userDataString);
-          const token = localStorage.getItem('userToken');
+          const tok = localStorage.getItem('userToken');
           const korisnik = userData.email;
+          console.log(tok);
+          console.log(korisnik);
           // Popunjavanje polja obrasca sa podacima iz userData objekta
           fetch('http://localhost:8084/notificationservis/api/notifications/my?korisnik='+korisnik, {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `Bearer ${tok}`,
+                        'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {
@@ -42,7 +44,8 @@
                 .then(data => {
                      // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
                   const tableBody = document.getElementById('table');
-                  data.forEach(item => {
+                  console.log(data);
+                  data.content.forEach(item => {
                     const row = tableBody.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
@@ -60,13 +63,23 @@
 
     });
     function filtriraj(){
-      const unos = document.getElementById('type');
-      if(unos==''){
-        fetch('http://localhost:8084/notificationservis/api/notifications/my?korisnik='+email, {
+      const tableBody = document.getElementById('table');
+
+    // Ukloni sve redove iz tabele (osim prvog koji sadrži zaglavlje)
+    while (tableBody.rows.length > 0) {
+        tableBody.deleteRow(0);
+    }
+      const korisnik = JSON.parse(localStorage.getItem('userData')).email;
+      const unos = document.getElementById('type').value;
+      
+      const tok = localStorage.getItem('userToken');
+      console.log(unos);
+      if(unos==""){
+        fetch('http://localhost:8084/notificationservis/api/notifications/my?korisnik='+korisnik, {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${tok}`,
+                        'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {
@@ -78,7 +91,8 @@
                 .then(data => {
                      // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
                   const tableBody = document.getElementById('table');
-                  data.forEach(item => {
+                  console.log(data);
+                  data.content.forEach(item => {
                     const row = tableBody.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
@@ -91,11 +105,11 @@
                     console.error('Error:', error);
                 });
       }else{
-        fetch('http://localhost:8084/notificationservis/api/notifications/myfilter?korisnik='+email+'?type='+unos, {
-                    method: 'GET',
+        fetch('http://localhost:8084/notificationservis/api/notifications/myfilter?korisnik='+korisnik+'&type='+unos, {
+          method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${tok}`,
+                        'Content-Type': 'application/json'
                     }
                 })
                 .then(response => {
@@ -107,7 +121,8 @@
                 .then(data => {
                      // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
                   const tableBody = document.getElementById('table');
-                  data.forEach(item => {
+                  console.log(data);
+                  data.content.forEach(item => {
                     const row = tableBody.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
@@ -146,7 +161,7 @@
             <a class="nav-link active" href="klijent/obavestenja.html">Obavestenja</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="klijent/login.html" id="logout">Logout</a>
+            <a class="nav-link" href="index.html" id="logout">Logout</a>
           </li>
         </ul>
       </div>
@@ -163,7 +178,7 @@
     <thead>
     <tr>
         <th>Tip</th>
-        <th>Parametar</th>
+        <th>Sadrzaj</th>
     </tr>
     </thead>
     <tbody id="table">

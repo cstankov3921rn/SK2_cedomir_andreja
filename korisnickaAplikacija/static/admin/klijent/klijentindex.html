@@ -21,7 +21,7 @@
       if (userDataString) {
           // Pretvaranje JSON stringa u objekat
           console.log(userDataString);
-          const userData = JSON.parse(localStorage.getItem('userToken'));
+          const userData = JSON.parse(userDataString);
           console.log(userData);
       }
     });
@@ -50,7 +50,7 @@
             <a class="nav-link" href="klijent/obavestenja.html">Obavestenja</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="klijent/login.html" id="logout">Logout</a>
+            <a class="nav-link" href="index.html" id="logout">Logout</a>
           </li>
         </ul>
       </div>

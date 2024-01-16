@@ -58,7 +58,7 @@ public class NotificationController {
     }
     @GetMapping("/my")
     @CheckSecurity(roles={"Admin","Manager","Klijent"})
-    public ResponseEntity<Page<Notification>> getNotificationByKorisnik(@RequestHeader("Authorization") String authorization, @RequestBody String korisnik, Pageable pageable) {
+    public ResponseEntity<Page<Notification>> getNotificationByKorisnik(@RequestHeader("Authorization") String authorization, @RequestParam String korisnik, Pageable pageable) {
         return new ResponseEntity<>(notificationService.findAllNotificationsByKorisnik(korisnik,pageable), HttpStatus.OK);
     }
 
