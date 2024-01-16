@@ -69,7 +69,7 @@
                       novoDugme.addEventListener('click', function() {
                           alert('Dugme je kliknuto!');
                           // Dodajte željenu akciju ovde
-                          
+                          console.log(item.id);
                           fetch('http://localhost:8084/zakazivanjeservis/api/otkaziKlijent/'+item.id, {
                               method: 'POST',
                               headers: { 'Content-Type': 'application/json' }
@@ -80,6 +80,7 @@
                                       //prikazi gresku
                                       alert(data.msg);
                                   } else {
+                                    
                                       window.location.reload();
                                   }
                               });
