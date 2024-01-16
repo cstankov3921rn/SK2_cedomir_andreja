@@ -20,8 +20,8 @@
       const userDataString = localStorage.getItem('userToken');
       if (userDataString) {
           // Pretvaranje JSON stringa u objekat
-          const userData = JSON.parse(userDataString);
           console.log(userDataString);
+          const userData = JSON.parse(localStorage.getItem('userToken'));
           console.log(userData);
       }
     });

@@ -19,16 +19,16 @@
         if (userDataString) {
           // Pretvaranje JSON stringa u objekat
           const userData = JSON.parse(userDataString);
-  
+          console.log(userData);
           // Popunjavanje polja obrasca sa podacima iz userData objekta
           document.getElementById('username').value = userData.username;
           document.getElementById('ime').value = userData.ime;
           document.getElementById('prezime').value = userData.prezime;
           const rawDate = userData.datumRodjenja;
-          console.log(rawDate);
+          console.log(userData.datumRodjenja);
           if (rawDate) {
             const formattedDate = new Date(rawDate).toISOString().split('T')[0];
-            document.getElementById('godina').value = formattedDate;
+            document.getElementById('godina').value.rawDate = rawDate;
           } else {
             console.error('Datum rođenja nije dostupan.');
           }
@@ -47,12 +47,12 @@
       // Funkcija koja će se pozvati prilikom klika na dugme za ažuriranje korisnika
       function submitForm() {
         const userDataString = localStorage.getItem('userData');
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('userToken');
         if (userDataString) {
           // Pretvaranje JSON stringa u objekat
           const userData = JSON.parse(userDataString);
           const klijentUpdateDto = {
-            oldUsername: userDataString.username,
+            oldUsername: userData.username,
             username: document.getElementById('username').value,
             password: userData.password,
             email: userData.email,
@@ -61,6 +61,8 @@
             datumRodjenja: document.getElementById('godina').value,
             brojClanskeKarte: userData.brojClanskeKarte
           }
+          console.log(klijentUpdateDto);
+          console.log(token);
           fetch('http://localhost:8084/korisnickiservis/api/klijent/update', {
                     method: 'PUT',
                     headers: {
@@ -76,6 +78,11 @@
                     return response.json();
                 })
                 .then(data => {
+                  userData.username = klijentUpdateDto.username;
+                  userData.ime = klijentUpdateDto.ime;
+                  userData.prezime = klijentUpdateDto.prezime;
+                  userData.datumRodjenja = klijentUpdateDto.datumRodjenja;
+                    console.log(userData);
                     localStorage.setItem('userData', JSON.stringify(data));
                     localStorage.setItem('userToken', token);
                 })

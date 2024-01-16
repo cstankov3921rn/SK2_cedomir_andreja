@@ -26,13 +26,12 @@
           const token = localStorage.getItem('userToken');
           const korisnik = userData.email;
           // Popunjavanje polja obrasca sa podacima iz userData objekta
-          fetch('http://localhost:8084/notificationservis/api/notifications/my', {
+          fetch('http://localhost:8084/notificationservis/api/notifications/my?korisnik='+korisnik, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(korisnik)
+                    }
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -63,15 +62,12 @@
     function filtriraj(){
       const unos = document.getElementById('type');
       if(unos==''){
-        fetch('http://localhost:8084/notificationservis/api/notifications/my', {
+        fetch('http://localhost:8084/notificationservis/api/notifications/my?korisnik='+email, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      korisnik: email
-                    })
+                    }
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -95,16 +91,12 @@
                     console.error('Error:', error);
                 });
       }else{
-        fetch('http://localhost:8084/notificationservis/api/notifications/myfilter', {
+        fetch('http://localhost:8084/notificationservis/api/notifications/myfilter?korisnik='+email+'?type='+unos, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      korisnik: email,
-                      type: unos
-                    })
+                    }
                 })
                 .then(response => {
                     if (!response.ok) {
