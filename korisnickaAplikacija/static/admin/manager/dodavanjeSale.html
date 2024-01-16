@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <base href="http://localhost:8000/admin/">
     <meta charset="UTF-8">
@@ -9,112 +10,172 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="main.css">
-    <script src="jelo.js"></script>
 </head>
+
 <body>
-<main class="container">
-    <div class="row">
-        <!-- Grey with black text -->
-        <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-            <div class="container-fluid">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="manager/prikaz.html">Prikaz</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manager/uredjivanjeProfila.html">Uredjivanje profila</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="manager/dodavanjeSale.html">Dodavanje sale</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manager/prikazSala.html">Prikaz sala</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manager/dodavanjeTermina.html">Dodavanje termina</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manager/pregledTermina.html">Pregled termina</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manager/pregledMejlova.html">Pregled mejlova</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <main class="container">
+        <div class="row">
+            <!-- Grey with black text -->
+            <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+                <div class="container-fluid">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="manager/prikaz.html">Prikaz</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="manager/uredjivanjeProfila.html">Uredjivanje profila</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="manager/dodavanjeSale.html">Dodavanje sale</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="manager/prikazSala.html">Prikaz sala</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="manager/dodavanjeTermina.html">Dodavanje termina</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="manager/pregledTermina.html">Pregled termina</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="manager/pregledMejlova.html">Pregled mejlova</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-    </div>
-    <h1>Dodavanje sale</h1>
-    <p>:)</p>
-    <form id="addGymForm">
-        <label for="ime">Ime Fiskulturne Sale:</label>
-        <input type="text" id="ime" name="ime" required>
-        <br>
-        <label for="opis">Opis:</label>
-        <input type="text" id="opis" name="opis" required>
-        <br>
-        <label for="brojTrenera">Broj Trenera:</label>
-        <input type="number" id="brojTrenera" name="brojTrenera" required>
-        <br>
-        <label for="besplatanTrening">Broj Besplatnih Treninga:</label>
-        <input type="number" id="besplatanTrening" name="besplatanTrening" required>
-        <br>
-        <label for="managerId">ID Managera:</label>
-        <input type="number" id="managerId" name="managerId" required>
-        <br>
-        <label for="tipTreninga">Tipovi Treninga:</label>
-        <div id="tipTreningaContainer">
-            <!-- Dinamički dodajte polja za svaki tip treninga -->
         </div>
-        <button type="button" onclick="addTrainingType()">Dodaj Tip Treninga</button>
-        <br>
-        <button type="button" onclick="submitForm()">Dodaj Salu</button>
-    </form>
+        <h1>Dodavanje sale</h1>
+        <p>:)</p>
+        <form id="addGymForm">
+            <label for="ime">Ime Fiskulturne Sale:</label>
+            <input type="text" id="ime" name="ime" required>
+            <br>
+            <label for="opis">Opis:</label>
+            <input type="text" id="opis" name="opis" required>
+            <br>
+            <label for="brojTrenera">Broj Trenera:</label>
+            <input type="number" id="brojTrenera" name="brojTrenera" required>
+            <br>
+            <label for="besplatanTrening">Broj Besplatnih Treninga:</label>
+            <input type="number" id="besplatanTrening" name="besplatanTrening" required>
+            <br>
+            <label for="managerId">ID Managera:</label>
+            <input type="number" id="managerId" name="managerId" required>
+            <br>
+            <label for="tipTreninga">Tipovi Treninga:</label>
+            <div id="tipTreningaContainer">
+                <!-- Dinamički dodajte polja za svaki tip treninga -->
+            </div>
+            <button type="button" onclick="addTrainingType()">Dodaj Tip Treninga</button>
+            <br>
+            <button type="button" onclick="submitForm()">Dodaj Salu</button>
+        </form>
 
-    <script>
-        function addTrainingType() {
-            var container = document.getElementById("tipTreningaContainer");
+        <script>
+            function addTrainingType() {
+                var container = document.getElementById("tipTreningaContainer");
 
-            var trainingTypeDiv = document.createElement("div");
+                var trainingTypeDiv = document.createElement("div");
 
-            var nazivLabel = document.createElement("label");
-            nazivLabel.textContent = "Naziv Treninga:";
-            var nazivInput = document.createElement("input");
-            nazivInput.type = "text";
-            nazivInput.name = "naziv";
-            nazivInput.required = true;
+                var nazivLabel = document.createElement("label");
+                nazivLabel.textContent = "Naziv Treninga:";
+                var nazivInput = document.createElement("input");
+                nazivInput.type = "text";
+                nazivInput.name = "naziv";
+                nazivInput.required = true;
 
-            var tipLabel = document.createElement("label");
-            tipLabel.textContent = "Tip Treninga (grupni/individualni):";
-            var tipInput = document.createElement("select");
-            tipInput.name = "tip";
-            tipInput.required = true;
-            var grupniOption = document.createElement("option");
-            grupniOption.value = "grupni";
-            grupniOption.text = "Grupni";
-            var individualniOption = document.createElement("option");
-            individualniOption.value = "individualni";
-            individualniOption.text = "Individualni";
-            tipInput.appendChild(grupniOption);
-            tipInput.appendChild(individualniOption);
+                var tipLabel = document.createElement("label");
+                tipLabel.textContent = "Tip Treninga (grupni/individualni):";
+                var tipInput = document.createElement("select");
+                tipInput.name = "tip";
+                tipInput.required = true;
+                var grupniOption = document.createElement("option");
+                grupniOption.value = "grupni";
+                grupniOption.text = "Grupni";
+                var individualniOption = document.createElement("option");
+                individualniOption.value = "individualni";
+                individualniOption.text = "Individualni";
+                tipInput.appendChild(grupniOption);
+                tipInput.appendChild(individualniOption);
 
-            var cenaLabel = document.createElement("label");
-            cenaLabel.textContent = "Cena Treninga:";
-            var cenaInput = document.createElement("input");
-            cenaInput.type = "number";
-            cenaInput.name = "cena";
-            cenaInput.required = true;
+                var cenaLabel = document.createElement("label");
+                cenaLabel.textContent = "Cena Treninga:";
+                var cenaInput = document.createElement("input");
+                cenaInput.type = "number";
+                cenaInput.name = "cena";
+                cenaInput.required = true;
 
-            trainingTypeDiv.appendChild(nazivLabel);
-            trainingTypeDiv.appendChild(nazivInput);
-            trainingTypeDiv.appendChild(tipLabel);
-            trainingTypeDiv.appendChild(tipInput);
-            trainingTypeDiv.appendChild(cenaLabel);
-            trainingTypeDiv.appendChild(cenaInput);
+                trainingTypeDiv.appendChild(nazivLabel);
+                trainingTypeDiv.appendChild(nazivInput);
+                trainingTypeDiv.appendChild(tipLabel);
+                trainingTypeDiv.appendChild(tipInput);
+                trainingTypeDiv.appendChild(cenaLabel);
+                trainingTypeDiv.appendChild(cenaInput);
 
-            container.appendChild(trainingTypeDiv);
-        }
-    </script>
-</main>
+                container.appendChild(trainingTypeDiv);
+            }
+
+            function submitForm() {
+                // Prikupljanje osnovnih informacija o fiskulturnoj sali
+                const ime = document.getElementById("ime").value;
+                const opis = document.getElementById("opis").value;
+                const brojTrenera = document.getElementById("brojTrenera").value;
+                const besplatanTrening = document.getElementById("besplatanTrening").value;
+                const managerId = document.getElementById("managerId").value;
+
+                // Prikupljanje informacija o tipovima treninga
+                const tipTreningaDivs = document.querySelectorAll("#tipTreningaContainer > div");
+
+                const tipoviTreninga = [];
+
+                tipTreningaDivs.forEach(function (div) {
+                    const naziv = div.querySelector('input[name="naziv"]').value;
+                    const tip = div.querySelector('select[name="tip"]').value;
+                    const cena = div.querySelector('input[name="cena"]').value;
+
+                    // Dodavanje podataka u niz
+                    tipoviTreninga.push({
+                        naziv: naziv,
+                        tip: tip,
+                        cena: cena // Pretvara u float ako je potrebno
+                    });
+                });
+
+                // Sada imate sve informacije u objektu data
+                const data = {
+                    ime: ime,
+                    opis: opis,
+                    brojTrenera: brojTrenera,
+                    besplatanTrening: besplatanTrening,
+                    managerId: managerId,
+                    tipTreninga: tipoviTreninga
+                };
+
+                const token = localStorage.getItem('userToken');
+
+                // POST zahtev ka serveru
+                fetch('http://localhost:8084/zakazivanjeservis/api/sale/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Uspesno poslato:', data);
+                        // Ovde možete dodati dalju logiku nakon uspešnog slanja podataka
+                    })
+                    .catch((error) => {
+                        console.error('Greška prilikom slanja:', error);
+                        // Ovde možete dodati logiku za upravljanje greškama
+                    });
+            }
+
+        </script>
+    </main>
 </body>
+
 </html>
