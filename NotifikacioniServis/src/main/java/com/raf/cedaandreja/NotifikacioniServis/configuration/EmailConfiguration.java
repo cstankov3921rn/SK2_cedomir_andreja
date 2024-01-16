@@ -23,8 +23,8 @@ public class EmailConfiguration {
         mailSender.setPort(587);
 
         //TODO kad hoces da testiras moras da ubacis ovde neki mail kredencijale. Napravicu nam privremeni mail kasnije
-        mailSender.setUsername("aradosavljev3521rn@raf.rs");//ovde ide mail
-        mailSender.setPassword("kataif.123");//ovdde sifra mail-a
+        mailSender.setUsername("aaaaaaaaaaa");//ovde ide mail
+        mailSender.setPassword("aaaaaaaaaaaa");//ovdde sifra mail-a
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

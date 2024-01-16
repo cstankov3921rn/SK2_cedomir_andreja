@@ -45,8 +45,8 @@ public class TerminController {
     }
 
     @GetMapping("/{id}")
-    @CheckSecurity(roles = {"ROLE_USER", "ROLE_ADMIN"})
-    public ResponseEntity<TerminDto> findById(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id) {
+    @CheckSecurity(roles = {"Klijent", "Manager", "Admin"})
+    public ResponseEntity<TerminDto> findById(@RequestHeader("Authorization") String authorization, @RequestParam Long id) {
         return new ResponseEntity<>(terminService.findById(id), HttpStatus.OK);
     }
 
@@ -57,7 +57,7 @@ public class TerminController {
     }
 
     @DeleteMapping("/{id}")
-    @CheckSecurity(roles = {"ROLE_ADMIN"})
+    @CheckSecurity(roles = {"Admin"})
     public ResponseEntity<?> delete(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id) {
         terminService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
