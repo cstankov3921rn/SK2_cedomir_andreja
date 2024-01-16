@@ -8,17 +8,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         window.addEventListener('load', () => {
-        document.getElementById('login').addEventListener('click', (evt) => {
+        document.getElementById('register').addEventListener('click', (evt) => {
             evt.preventDefault();
 
+            let datumInput = document.getElementById('datum');
 
+// Dobijanje vrednosti iz input polja
+            let izabraniDatum = datumInput.value;
             const data = {
                 username: document.getElementById('username').value,
-                password: document.getElementById('password').value
+                password: document.getElementById('password').value,
+                email: document.getElementById('email').value,
+                ime: document.getElementById('ime').value,
+                prezime: document.getElementById('prezime').value,
+                datumRodjenja: izabraniDatum,
+                brojClanskeKarte: Math.floor(Math.random() * 1000000) + 1
             };
 
 
-            fetch('http://127.0.0.1:9001/login', {
+            fetch('http://localhost:8084/korisnickiservis/api/klijent/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -63,10 +71,18 @@
             <input type="text" class="form-control" id="ime">
         </div>
         <div class="mb-3">
+            <label for="prezime" class="form-label">Prezime</label>
+            <input type="text" class="form-control" id="prezime">
+        </div>
+        <div class="mb-3">
             <label for="datum" class="form-label">Datum rodjenja</label>
             <input type="date" class="form-control" id="datum">
         </div>
-        <button class="btn btn-primary" id="login">Login</button>
+        <div class="mb-3">
+            <label for="pin" class="form-label">Pin</label>
+            <input type="text" class="form-control" id="pin">
+        </div>
+        <button class="btn btn-primary" id="register">Register</button>
     </form>
 </div>
 </body>
