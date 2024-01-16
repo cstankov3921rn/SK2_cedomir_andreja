@@ -28,7 +28,7 @@
           console.log(tok);
           console.log(korisnik);
           // Popunjavanje polja obrasca sa podacima iz userData objekta
-          fetch('http://localhost:8084/zakazivanjeservis/api/termin/sorted', {
+          fetch('http://localhost:8084/zakazivanjeservis/api/termin/all', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${tok}`,
@@ -84,7 +84,9 @@
                                       //prikazi gresku
                                       alert(data.msg);
                                   } else {
-                                      window.location.reload();
+                                      window.location.reload(true);
+                                      location.replace(location.href);
+                                      document.location.reload();
                                   }
                               });
                       });
@@ -128,7 +130,7 @@
       console.log(unos);
       if(unos==""){
         if(tip==""){
-          fetch('http://localhost:8084/zakazivanjeservis/api/termin/sorted', {
+          fetch('http://localhost:8084/zakazivanjeservis/api/termin/all', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${tok}`,
@@ -184,7 +186,7 @@
                                       //prikazi gresku
                                       alert(data.msg);
                                   } else {
-                                      window.location.reload();
+                                      document.location.reload();
                                   }
                               });
                       });
@@ -264,7 +266,7 @@
                                       //prikazi gresku
                                       alert(data.msg);
                                   } else {
-                                      window.location.reload();
+                                      document.location.reload();
                                   }
                               });
                       });
@@ -346,7 +348,7 @@
                                       //prikazi gresku
                                       alert(data.msg);
                                   } else {
-                                      window.location.reload();
+                                      document.location.reload();
                                   }
                               });
                       });

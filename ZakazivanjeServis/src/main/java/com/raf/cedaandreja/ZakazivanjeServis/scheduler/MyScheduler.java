@@ -32,15 +32,19 @@ public class MyScheduler {
 
     @Scheduled(cron="0 */5 * * * *")
     public void executeTask(){
+
         List<Rezervacija> rezervacijaList = rezervacijaRepository.findAll();
         for(Rezervacija rezervacija:rezervacijaList){ //posto u rezervaciji nemam vreme, moram da nadjem za koji termin je vezana pa onda odatle da vidim vremeOd
             Termin termin = terminRepository.findById(rezervacija.getTerminId()).orElseThrow(()->new NotFoundException(String.format("Termin sa tim id-jem nije nadjen")));
             LocalDateTime vremeOd = LocalDateTime.of(termin.getDatum().getYear(),termin.getDatum().getMonth(),termin.getDatum().getDayOfMonth(),termin.getVremeOd().getHour(),termin.getVremeOd().getMinute());
             Duration razlikaSati = Duration.between(LocalDateTime.now(), vremeOd);
+            System.out.println(razlikaSati.toHours());
             if(termin.getTip().equals("grupni") && termin.getTrenutanBrojOsoba()<3 && razlikaSati.toHours()<24){
                 rezervacijaService.otkaziManager(rezervacija.getId());
             }
 
         }
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa\n");
+
     }
 }
