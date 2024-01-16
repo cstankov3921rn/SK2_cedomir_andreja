@@ -57,45 +57,71 @@
                       const cell6 = row.insertCell(5);
                       const cell7 = row.insertCell(6);
                       const cell8 = row.insertCell(7);
-                      const cell9 = row.insertCell(8);
 
                       // Kreiranje dugmeta
                       const novoDugme = document.createElement('button');
 
                       // Dodavanje teksta na dugme
                       novoDugme.textContent = 'Otkazi';
+                      novoDugme.id = item.id;
 
                       // Dodavanje akcije na klik dugmeta
                       novoDugme.addEventListener('click', function() {
                           alert('Dugme je kliknuto!');
                           // Dodajte željenu akciju ovde
-                          
-                          fetch('http://localhost:8084/zakazivanjeservis/api/otkaziKlijent/'+item.id, {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' }
+                          console.log(novoDugme.id);
+                          fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/otkaziklijent/'+novoDugme.id, {
+                              method: 'POST'
                           })
-                              .then( res => res.json() )
                               .then( data => {
                                   if (data.msg) {
                                       //prikazi gresku
                                       alert(data.msg);
                                   } else {
-                                      window.location.reload();
+                                    
+                                      document.location.reload();
                                   }
                               });
                       });
                       const dani = ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"];
                       const danuv = new Date(item.dan);
+                      const t = localStorage.getItem('userToken');
                       console.log(dani[danuv.getDay()]);
+                      console.log(novoDugme.id);
+                      console.log(t);
                       cell1.textContent = item.terminId; // Prilagodite prema strukturi vaših podataka
-                      cell2.textContent = item.cena; // Prilagodite prema strukturi vaših podataka
+                      fetch('http://localhost:8084/zakazivanjeservis/api/termin/'+item.terminId, {
+                              method: 'GET',
+                              headers: {
+                                  'Content-Type': 'application/json',
+                                  'Authorization': `Bearer ${t}`
+                              }
+                          })
+                              .then( data => {
+                                  if (data.msg) {
+                                      //prikazi gresku
+                                      alert(data.msg);
+                                  } else {
+                                    console.log(data);
+                                    cell2.textContent = data.datum;
+                                    cell3.textContent = data.vremeOd;
+                                    cell4.textContent = data.vredeDo;
+                                    cell5.textContent = data.fiskulturnaSala.ime;
+                                    cell6.textContent = data.tip;
+                                  }
+                              })
+                              .catch(error => {
+                                console.error('Error:', error);
+                              });
+                      // Prilagodite prema strukturi vaših podataka
                       // cell3.textContent = item.maxBrojOsoba;
                       // cell4.textContent = item.trenutanBrojOsoba;
                       // cell5.textContent = item.vremeOd;
                       // cell6.textContent = item.vremeDo;
                       // cell7.textContent = item.fiskulturnaSala.ime;
                       // cell8.textContent = item.tipTreninga.naziv;
-                      cell9.appendChild(novoDugme);
+                      cell7.textContent = item.cena; 
+                      cell8.appendChild(novoDugme);
                     }
                     
                   });               

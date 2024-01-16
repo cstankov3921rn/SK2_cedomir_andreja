@@ -46,7 +46,7 @@ public class TerminController {
 
     @GetMapping("/{id}")
     @CheckSecurity(roles = {"Klijent", "Manager", "Admin"})
-    public ResponseEntity<TerminDto> findById(@RequestHeader("Authorization") String authorization, @RequestParam Long id) {
+    public ResponseEntity<TerminDto> findById(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id) {
         return new ResponseEntity<>(terminService.findById(id), HttpStatus.OK);
     }
 
