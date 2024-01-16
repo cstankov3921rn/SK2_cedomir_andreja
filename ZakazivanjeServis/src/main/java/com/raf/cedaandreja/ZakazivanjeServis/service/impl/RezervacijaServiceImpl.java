@@ -14,6 +14,8 @@ import com.raf.cedaandreja.ZakazivanjeServis.service.RezervacijaService;
 import com.raf.cedaandreja.ZakazivanjeServis.userservice.dto.KlijentDto;
 import com.raf.cedaandreja.ZakazivanjeServis.userservice.dto.ManagerDto;
 import io.github.resilience4j.retry.Retry;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -162,5 +164,10 @@ public class RezervacijaServiceImpl implements RezervacijaService {
 
         terminRepository.save(termin);
         rezervacijaRepository.delete(rezervacijaRepository.findById(id).get());
+    }
+
+    @Override
+    public Page<RezervacijaDto> findRezervacijeOdKlijenta(Long userId, Pageable pageable) {
+        return rezervacijaRepository.findRezervacijaByUserId(userId,pageable).map(rezervacijaMapper::rezervacijaToRezervacijaDto);
     }
 }

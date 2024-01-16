@@ -118,6 +118,12 @@ public class KlijentServiceImpl implements KlijentService {
     }
 
     @Override
+    public KlijentDto findKlijentPoUsername(String username) {
+        User klijent = klijentRepository.findKlijentByUsername(username).orElseThrow(()->new NotFoundException(String.format("User with that username doesn't exist")));
+        return klijentMapper.klijentToKlijentDto((Klijent) klijent);
+    }
+
+    @Override
     public TokenResponseDto login(TokenRequestDto tokenRequestDto) {
         //Try to find active user for specified credentials
         Klijent klijent = klijentRepository

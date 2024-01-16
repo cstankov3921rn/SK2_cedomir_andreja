@@ -61,4 +61,9 @@ public class FiskulturnaSalaServiceImpl implements FiskulturnaSalaService {
         }
         return fiskulturnaSalaMapper.fiskulturnaSalaToFiskulturnaSalaDto(fiskulturnaSala);
     }
+
+    @Override
+    public Page<FiskulturnaSalaDto> findSaleOdManagera(String managerId, Pageable pageable) {
+        return fiskulturnaSalaRepository.findFiskulturnaSalaByManagerId(managerId,pageable).map(fiskulturnaSalaMapper::fiskulturnaSalaToFiskulturnaSalaDto);
+    }
 }

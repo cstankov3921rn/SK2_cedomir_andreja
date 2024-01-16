@@ -149,4 +149,10 @@ public class ManagerServiceImpl implements ManagerService {
         User manager = managerRepository.findById(managerId).get();
         return managerMapper.managerToManagerDto((Manager)manager);
     }
+
+    @Override
+    public ManagerDto findManagerPoUsername(String username) {
+        User manager = managerRepository.findManagerByUsername(username).orElseThrow(()->new NotFoundException(String.format("Manager with that username doesn't exist")));
+        return managerMapper.managerToManagerDto((Manager)manager);
+    }
 }

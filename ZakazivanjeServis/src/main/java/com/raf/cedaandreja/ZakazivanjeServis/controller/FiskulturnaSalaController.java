@@ -30,4 +30,10 @@ public class FiskulturnaSalaController {
     public ResponseEntity<FiskulturnaSalaDto> updateSala(@RequestHeader("Authorization") String authorization, @RequestBody FiskulturnaSalaUpdateDto fiskulturnaSalaUpdateDto) {
         return new ResponseEntity<>(fiskulturnaSalaService.updateSala(fiskulturnaSalaUpdateDto), HttpStatus.OK);
     }
+
+    @GetMapping("/sale")
+    @CheckSecurity(roles={"Manager"})
+    public ResponseEntity<Page<FiskulturnaSalaDto>> getSaleOdManagera(@RequestHeader("Authorization") String authorization, @RequestParam String managerId,Pageable pageable) {
+        return new ResponseEntity<>(fiskulturnaSalaService.findSaleOdManagera(managerId,pageable), HttpStatus.OK);
+    }
 }

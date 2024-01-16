@@ -34,10 +34,11 @@ public class ManagerController {
         return new ResponseEntity<>(managerService.findManagerId(managerId), HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public ResponseEntity<ManagerDto> getManager(@RequestParam String ime, @RequestParam String prezime) {
-//        return new ResponseEntity<>(managerService.findManager(ime, prezime), HttpStatus.OK);
-//    }
+    @GetMapping("/manager")
+    @CheckSecurity(roles={"Manager","Admin"})
+    public ResponseEntity<ManagerDto> getManager(@RequestHeader("Authorization") String authorization, @RequestParam String username) {
+        return new ResponseEntity<>(managerService.findManagerPoUsername(username), HttpStatus.OK);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<ManagerDto> saveManager(@RequestBody ManagerCreateDto managerCreateDto) {

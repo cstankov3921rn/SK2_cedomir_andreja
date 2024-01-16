@@ -15,4 +15,6 @@ public interface FiskulturnaSalaService {
     //FiskulturnaSalaDto addManager(ManagerCreateDto managerDto);
 
     FiskulturnaSalaDto updateSala(FiskulturnaSalaUpdateDto fiskulturnaSalaDto);
+
+    Page<FiskulturnaSalaDto> findSaleOdManagera(String managerId,Pageable pageable);
 }

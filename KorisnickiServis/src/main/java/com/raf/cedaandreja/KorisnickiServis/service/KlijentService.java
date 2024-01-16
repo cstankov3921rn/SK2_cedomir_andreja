@@ -28,4 +28,6 @@ public interface KlijentService {
     int getBrojZakazanihTermina(Long klijentId);
 
     KlijentDto findKlijentId(Long klijentId);
+
+    KlijentDto findKlijentPoUsername(String username);
 }

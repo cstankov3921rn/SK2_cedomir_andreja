@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.KorisnickiServis.service;
 
+import com.raf.cedaandreja.KorisnickiServis.domain.Manager;
 import com.raf.cedaandreja.KorisnickiServis.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,6 @@ public interface ManagerService {
     ManagerDto setForbidenManager(String username,Boolean forbiden);
 
     ManagerDto findManagerId(Long managerId);
+
+    ManagerDto findManagerPoUsername(String username);
 }
