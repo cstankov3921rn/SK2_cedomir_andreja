@@ -21,7 +21,7 @@ public class RezervacijaMapper {
         RezervacijaDto rezervacijaDto = new RezervacijaDto();
         rezervacijaDto.setId(rezervacija.getId());
         rezervacijaDto.setUserId(rezervacija.getUserId());
-        rezervacijaDto.setTerminId(rezervacijaDto.getTerminId());
+        rezervacijaDto.setTerminId(rezervacija.getTerminId());
         rezervacijaDto.setCena(rezervacija.getCena());
         return rezervacijaDto;
     }
