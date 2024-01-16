@@ -18,9 +18,9 @@ public class FiskulturnaSalaMapper {
         fiskulturnaSalaDto.setIme(fiskulturnaSala.getIme());
         fiskulturnaSalaDto.setOpis(fiskulturnaSala.getOpis());
         fiskulturnaSalaDto.setBrojTrenera(fiskulturnaSala.getBrojTrenera());
-        fiskulturnaSalaDto.setTipTreninga(fiskulturnaSalaDto.getTipTreninga());
-        fiskulturnaSalaDto.setBesplatanTrening(fiskulturnaSalaDto.getBesplatanTrening());
-        fiskulturnaSalaDto.setManagerId(fiskulturnaSalaDto.getManagerId());
+        fiskulturnaSalaDto.setTipTreninga(fiskulturnaSala.getTipTreninga());
+        fiskulturnaSalaDto.setBesplatanTrening(fiskulturnaSala.getBesplatanTrening());
+        fiskulturnaSalaDto.setManagerId(fiskulturnaSala.getManagerId());
         return fiskulturnaSalaDto;
     }
 
