@@ -16,25 +16,58 @@
                 username: document.getElementById('username').value,
                 password: document.getElementById('password').value
             };
-    
-    
-            fetch('http://127.0.0.1:9001/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-                .then( res => res.json() )
-                .then( data => {
-                    if (data.msg) {
-                        //prikazi gresku
-                        alert(data.msg);
-                    } else {
-                        //zapisi token u cookie
-                        document.cookie = `token=${data.token};SameSite=Lax`;
-                        //redirektuj na index.html stranicu
-                        window.location.href = 'index.html';
+            const token = document.getElementById('token').value;
+            if(token==""){
+
+                fetch('http://localhost:8084/korisnickiservis/api/manager/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    //ostane na istom mestu i ceka token
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
+            }else{
+
+
+                const user = document.getElementById('username').value;
+                const pass = document.getElementById('password').value;
+                const tok = document.getElementById('token').value;
+                fetch('http://localhost:8084/korisnickiservis/api/manager/manager?username='+user, {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': `Bearer ${tok}`,
+                        'Content-Type': 'application/json'
+                    }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        data.password = pass;
+                        console.log(data);
+                        localStorage.setItem('userData', JSON.stringify(data));
+                        localStorage.setItem('userToken', tok);
+                        window.location.href = 'prikaz.html';
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
         });
     });
     
@@ -54,6 +87,10 @@
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password">
            </div>
+            <div class="mb-3">
+                <label for="token" class="form-label">Token</label>
+                <input type="text" class="form-control" id="token">
+            </div>
            <button class="btn btn-primary" id="login">Login</button>
         </form>
      </div>

@@ -92,7 +92,7 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     public ResponseEntity<KlijentDto> getKlijent(Long klijentId){
         System.out.println("["+System.currentTimeMillis() /1000 + "] Getting Klijent for id: "+klijentId);
         try {
-            Thread.sleep(5000);
+            //Thread.sleep(5000);
             return userServiceRestTemplate.exchange("/klijent/"+klijentId+"/povecajBrojZakazanihTermina", HttpMethod.POST,null,KlijentDto.class);
         } catch(HttpClientErrorException e){
             if(e.getStatusCode().equals(HttpStatus.NOT_FOUND))
