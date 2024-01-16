@@ -42,7 +42,68 @@
 
   </div>
   <h1>Termini</h1>
-  <p>Ovo je pocetna strana klijenta</p>
+  
+  <label for="daysOfWeek">Dan:</label>
+  <select id="daysOfWeek" name="daysOfWeek">
+    <option value="ponedeljak">Ponedeljak</option>
+    <option value="utorak">Utorak</option>
+    <option value="sreda">Sreda</option>
+    <option value="četvrtak">Četvrtak</option>
+    <option value="petak">Petak</option>
+    <option value="subota">Subota</option>
+    <option value="nedelja">Nedelja</option>
+  </select>
+  <label for="type">Tip:</label>
+  <input type="text" id="type" name="type">
+  <button type="button" onclick="filtriraj()">Filtriraj</button>
+  <br>
+  <table>
+    <thead>
+    <tr>
+      <tr>
+        <th>Dan</th>
+        <th>Datum</th>
+        <th>Kapacitet</th>
+        <th>Broj rezervacija</th>
+        <th>Vreme Od</th>
+        <th>Vreme Do</th>
+        <th>Sala</th>
+        <th>Tip Treninga</th>
+        <th>Akcija</th>
+    </tr>
+    </tr>
+    </thead>
+    <tbody id="table">
+    <!-- Podaci će biti dinamički dodati ovde -->
+    </tbody>
+</table>
 </main>
 </body>
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+  }
+
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+  }
+
+  th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+  }
+
+  th {
+      background-color: #f2f2f2;
+  }
+
+  td.large-cell {
+      max-width: 300px;
+      word-wrap: break-word;
+  }
+</style>
 </html>

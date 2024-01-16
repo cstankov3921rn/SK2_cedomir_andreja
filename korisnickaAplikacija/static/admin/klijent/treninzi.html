@@ -22,7 +22,7 @@
             <a class="nav-link" href="klijent/klijentindex.html">Klijent</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="manager/profil.html">Profil</a>
+            <a class="nav-link" href="klijent/profil.html">Profil</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="klijent/termin.html">Termin</a>
@@ -42,7 +42,52 @@
 
   </div>
   <h1>Treninzi koje je klijent rezervisao</h1>
-  <p>Ovo je pocetna strana klijenta</p>
+  
+  <br>
+  <table>
+    <thead>
+    <tr>
+      <th>Dan</th>
+      <th>Datum</th>
+      <th>Vreme Od</th>
+      <th>Vreme Do</th>
+      <th>Sala</th>
+      <th>Tip Treninga</th>
+      <th>Cena</th>
+      <th>Akcija</th>
+    </tr>
+    </thead>
+    <tbody id="table">
+    <!-- Podaci će biti dinamički dodati ovde -->
+    </tbody>
+</table>
 </main>
 </body>
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+  }
+
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+  }
+
+  th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+  }
+
+  th {
+      background-color: #f2f2f2;
+  }
+
+  td.large-cell {
+      max-width: 300px;
+      word-wrap: break-word;
+  }
+</style>
 </html>
