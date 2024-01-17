@@ -53,7 +53,7 @@ public class RezervacijaController {
     }
 
     @GetMapping("/sveRezervacije")
-    @CheckSecurity(roles={"Manager"})
+    @CheckSecurity(roles={"Manager","Admin"})
     public ResponseEntity<Page<RezervacijaDto>> getRezervacijeSve(@RequestHeader("Authorization") String authorization, Pageable pageable) {
         return new ResponseEntity<>(rezervacijaService.findSveRezervacije(pageable), HttpStatus.OK);
     }

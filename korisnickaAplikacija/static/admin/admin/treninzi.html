@@ -29,7 +29,7 @@
           console.log(tok);
           console.log(korisnik);
           // Popunjavanje polja obrasca sa podacima iz userData objekta
-          fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/rezervacije?userId='+korisnik, {
+          fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/sveRezervacije', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${tok}`,
@@ -69,7 +69,7 @@
                       novoDugme.addEventListener('click', function() {
                           alert('Dugme je kliknuto!');
                           // Dodajte željenu akciju ovde
-                          console.log(novoDugme.id);
+                          console.log("Ovo se brise"+novoDugme.id);
                           fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/otkaziklijent/'+novoDugme.id, {
                               method: 'POST'
                           })
@@ -87,8 +87,9 @@
                       const danuv = new Date(item.dan);
                       const t = localStorage.getItem('userToken');
                       console.log(dani[danuv.getDay()]);
-                      console.log(novoDugme.id);
+                      console.log("id = "+novoDugme.id);
                       console.log(t);
+                      console.log(item.terminId);
                       cell1.textContent = item.terminId; // Prilagodite prema strukturi vaših podataka
                       fetch('http://localhost:8084/zakazivanjeservis/api/termin/'+item.terminId, {
                               method: 'GET',

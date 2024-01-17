@@ -89,28 +89,35 @@
                       console.log(dani[danuv.getDay()]);
                       console.log(novoDugme.id);
                       console.log(t);
+                      const terminId = item.terminId;
+                      console.log(item);
+                      console.log(terminId);
                       cell1.textContent = item.terminId; // Prilagodite prema strukturi vaših podataka
-                      fetch('http://localhost:8084/zakazivanjeservis/api/termin/'+item.terminId, {
-                              method: 'GET',
-                              headers: {
-                                  'Content-Type': 'application/json',
-                                  'Authorization': `Bearer ${t}`
-                              }
-                          })
+                      fetch(`http://localhost:8084/zakazivanjeservis/api/termin/${terminId}`, {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${t}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
                               .then( data => {
-                                  if (data.msg) {
-                                      //prikazi gresku
-                                      alert(data.msg);
-                                  } else {
+                                  
                                     console.log(data);
                                     cell2.textContent = data.datum;
                                     cell3.textContent = data.vremeOd;
                                     cell4.textContent = data.vredeDo;
                                     cell5.textContent = data.fiskulturnaSala.ime;
                                     cell6.textContent = data.tip;
-                                  }
+                                  
                               })
                               .catch(error => {
+                                console.log("Greskaaaaaaaaaaaaaaaaaa");
                                 console.error('Error:', error);
                               });
                       // Prilagodite prema strukturi vaših podataka

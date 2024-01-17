@@ -16,6 +16,7 @@ public interface TerminRepository extends JpaRepository<Termin,Long> {
 
     Page<Termin> findAllByOrderByVremeOd(Pageable pageable);
 
+
     List<Termin> findByTrenutanBrojOsobaLessThanAndTip(int maxBrojOsoba, String tip);
 
 }
