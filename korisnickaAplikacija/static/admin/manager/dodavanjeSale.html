@@ -40,6 +40,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="manager/pregledMejlova.html">Pregled mejlova</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html" id="logout">Logout</a>
+                          </li>
                     </ul>
                 </div>
             </nav>
@@ -73,6 +76,14 @@
         </form>
 
         <script>
+            window.addEventListener('load',()=>{
+      document.getElementById('logout').addEventListener('click', () => {
+        // Brisanje svih podataka iz localStorage
+        localStorage.clear();
+        console.log('logout!!!!!!!');
+        // Preusmeravanje na stranicu za logout (prilagodite prema vašim potrebama)
+      });
+    });
             function addTrainingType() {
                 var container = document.getElementById("tipTreningaContainer");
 
