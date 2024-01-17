@@ -60,9 +60,9 @@
             <label for="besplatanTrening">Broj Besplatnih Treninga:</label>
             <input type="number" id="besplatanTrening" name="besplatanTrening" required>
             <br>
-            <label for="managerId">ID Managera:</label>
+            <!-- <label for="managerId">ID Managera:</label>
             <input type="number" id="managerId" name="managerId" required>
-            <br>
+            <br> -->
             <label for="tipTreninga">Tipovi Treninga:</label>
             <div id="tipTreningaContainer">
                 <!-- Dinamički dodajte polja za svaki tip treninga -->
@@ -122,8 +122,10 @@
                 const opis = document.getElementById("opis").value;
                 const brojTrenera = document.getElementById("brojTrenera").value;
                 const besplatanTrening = document.getElementById("besplatanTrening").value;
-                const managerId = document.getElementById("managerId").value;
-
+                const userDataString = localStorage.getItem('userData');
+                const userData = JSON.parse(userDataString);
+                const managerId = userData.id;
+                
                 // Prikupljanje informacija o tipovima treninga
                 const tipTreningaDivs = document.querySelectorAll("#tipTreningaContainer > div");
 
