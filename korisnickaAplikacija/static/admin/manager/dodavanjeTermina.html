@@ -9,8 +9,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="main.css">
-    <script src="jelo.js"></script>
 </head>
+
+<script>
+    function submitForm() {
+        const fiskulturnaSalaId = document.getElementById("fiskulturnaSalaId").value;
+        const tipTreningaId = document.getElementById("tipTreningaId").value;
+        const datum = document.getElementById("datum").value;
+        const vremeOd = document.getElementById("vremeOd").value;
+        const vremeDo = document.getElementById("vremeDo").value;
+        const maxBrojOsoba = document.getElementById("maxBrojOsoba").value;
+
+        const data = {
+            fiskulturnaSalaId: fiskulturnaSalaId,
+            tipTreningaId: tipTreningaId,
+            datum: datum,
+            vremeOd: vremeOd,
+            vremeDo: vremeDo,
+            maxBrojOsoba: maxBrojOsoba
+        };
+
+        const token = localStorage.getItem('userToken');
+
+        // POST zahtev ka serveru
+        fetch('http://localhost:8084/zakazivanjeservis/api/termin/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Uspesno poslato:', data);
+                // Ovde možete dodati dalju logiku nakon uspešnog slanja podataka
+            })
+            .catch((error) => {
+                console.error('Greška prilikom slanja:', error);
+                // Ovde možete dodati logiku za upravljanje greškama
+            });
+    }
+</script>
+
 <body>
 <main class="container">
     <div class="row">
