@@ -86,23 +86,268 @@
                     cell2.textContent = item.fiskulturnaSala.managerId; // Prilagodite prema strukturi vaših podataka
                     cell3.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
                     cell4.textContent = item.vremeOd;
-                    cell5.textContent = item.vremeDo; // Prilagodite prema strukturi vaših podataka
+                    cell5.textContent = item.tipTreninga.tip; // Prilagodite prema strukturi vaših podataka
                     cell6.textContent = item.maxBrojOsoba;
                     cell7.textContent = item.trenutanBrojOsoba;
                     cell8.textContent = item.fiskulturnaSala.ime; // Prilagodite prema strukturi vaših podataka
                     cell9.textContent = item.tipTreninga.naziv;
                     cell10.appendChild(novoDugme);
-                  });               
+                  });
+                            
                  })
                 .catch(error => {
                     console.error('Error:', error);
                 });
+                     
         } else {
           console.error('Podaci o korisniku nisu pronađeni u localStorage.');
         };
 
     });
-    
+    function filtriraj(){
+                    const tableBody = document.getElementById('table');
+                    while (tableBody.rows.length > 0) {
+                        tableBody.deleteRow(0);
+                    }
+
+                    const dan = document.getElementById("daysOfWeek").value;
+                    const tip = document.getElementById("type").value;
+                    const mana = document.getElementById("mana").value;
+                    console.log(dan);
+                    console.log(tip);
+                    console.log(mana);
+                              
+                    const userData = JSON.parse(localStorage.getItem('userData'));
+                    const token = localStorage.getItem('userToken');
+                    const korisnik = userData.email;
+                    if(dan!==""){
+                      fetch('http://localhost:8084/zakazivanjeservis/api/termin/dan?dan='+dan, {
+                          method: 'GET',
+                          headers: {
+                              'Content-Type': 'application/json',
+                              'Authorization': `Bearer ${token}`,
+                          }
+                      })
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error(`HTTP error! Status: ${response.status}`);
+                          }
+                          return response.json();
+                      })
+                      .then(data => {
+                          // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
+                        const tableBody = document.getElementById('table');
+                        console.log(data);
+                        data.content.forEach(item => {
+                          if(mana===""||mana===item.fiskulturnaSala.managerId){
+                            const row = tableBody.insertRow();
+                          const cell1 = row.insertCell(0);
+                          const cell2 = row.insertCell(1);
+                          const cell3 = row.insertCell(2);
+                          const cell4 = row.insertCell(3);
+                          const cell5 = row.insertCell(4);
+                          const cell6 = row.insertCell(5);
+                          const cell7 = row.insertCell(6);
+                          const cell8 = row.insertCell(7);
+                          const cell9 = row.insertCell(8);
+                          const cell10 = row.insertCell(9);
+
+                          const novoDugme = document.createElement('button');
+
+                            // Dodavanje teksta na dugme
+                            novoDugme.textContent = 'Obrisi';
+                            novoDugme.id = item.id;
+
+                            // Dodavanje akcije na klik dugmeta
+                            novoDugme.addEventListener('click', function() {
+                                alert('Dugme je kliknuto!');
+                                // Dodajte željenu akciju ovde
+                                console.log(novoDugme.id);
+                                // fetch('http://localhost:8084/zakazivanjeservis/api/sale/otkaziklijent/'+novoDugme.id, {
+                                //     method: 'POST'
+                                // })
+                                //     .then( data => {
+                                //         if (data.msg) {
+                                //             //prikazi gresku
+                                //             alert(data.msg);
+                                //         } else {
+                                          
+                                //             document.location.reload();
+                                //         }
+                                //     });
+                            });
+
+                          cell1.textContent = item.id;
+                          cell2.textContent = item.fiskulturnaSala.managerId; // Prilagodite prema strukturi vaših podataka
+                          cell3.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
+                          cell4.textContent = item.vremeOd;
+                          cell5.textContent = item.tipTreninga.tip; // Prilagodite prema strukturi vaših podataka
+                          cell6.textContent = item.maxBrojOsoba;
+                          cell7.textContent = item.trenutanBrojOsoba;
+                          cell8.textContent = item.fiskulturnaSala.ime; // Prilagodite prema strukturi vaših podataka
+                          cell9.textContent = item.tipTreninga.naziv;
+                          cell10.appendChild(novoDugme);
+                          }
+                        });
+                                  
+                      })
+                      .catch(error => {
+                          console.error('Error:', error);
+                      });
+                    }else{
+                      if(tip!==""){
+                        fetch('http://localhost:8084/zakazivanjeservis/api/termin/tip?tip='+tip, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`,
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
+                          const tableBody = document.getElementById('table');
+                          console.log(data);
+                          data.content.forEach(item => {
+                            if(mana===""||mana===item.fiskulturnaSala.managerId){
+                              const row = tableBody.insertRow();
+                            const cell1 = row.insertCell(0);
+                            const cell2 = row.insertCell(1);
+                            const cell3 = row.insertCell(2);
+                            const cell4 = row.insertCell(3);
+                            const cell5 = row.insertCell(4);
+                            const cell6 = row.insertCell(5);
+                            const cell7 = row.insertCell(6);
+                            const cell8 = row.insertCell(7);
+                            const cell9 = row.insertCell(8);
+                            const cell10 = row.insertCell(9);
+
+                            const novoDugme = document.createElement('button');
+
+                              // Dodavanje teksta na dugme
+                              novoDugme.textContent = 'Obrisi';
+                              novoDugme.id = item.id;
+
+                              // Dodavanje akcije na klik dugmeta
+                              novoDugme.addEventListener('click', function() {
+                                  alert('Dugme je kliknuto!');
+                                  // Dodajte željenu akciju ovde
+                                  console.log(novoDugme.id);
+                                  // fetch('http://localhost:8084/zakazivanjeservis/api/sale/otkaziklijent/'+novoDugme.id, {
+                                  //     method: 'POST'
+                                  // })
+                                  //     .then( data => {
+                                  //         if (data.msg) {
+                                  //             //prikazi gresku
+                                  //             alert(data.msg);
+                                  //         } else {
+                                            
+                                  //             document.location.reload();
+                                  //         }
+                                  //     });
+                              });
+
+                            cell1.textContent = item.id;
+                            cell2.textContent = item.fiskulturnaSala.managerId; // Prilagodite prema strukturi vaših podataka
+                            cell3.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
+                            cell4.textContent = item.vremeOd;
+                            cell5.textContent = item.tipTreninga.tip; // Prilagodite prema strukturi vaših podataka
+                            cell6.textContent = item.maxBrojOsoba;
+                            cell7.textContent = item.trenutanBrojOsoba;
+                            cell8.textContent = item.fiskulturnaSala.ime; // Prilagodite prema strukturi vaših podataka
+                            cell9.textContent = item.tipTreninga.naziv;
+                            cell10.appendChild(novoDugme);
+                            }
+                          });
+                                    
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                      }else{
+                        fetch('http://localhost:8084/zakazivanjeservis/api/termin/all', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`,
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
+                          const tableBody = document.getElementById('table');
+                          console.log(data);
+                          data.content.forEach(item => {
+                            const row = tableBody.insertRow();
+                            const cell1 = row.insertCell(0);
+                            const cell2 = row.insertCell(1);
+                            const cell3 = row.insertCell(2);
+                            const cell4 = row.insertCell(3);
+                            const cell5 = row.insertCell(4);
+                            const cell6 = row.insertCell(5);
+                            const cell7 = row.insertCell(6);
+                            const cell8 = row.insertCell(7);
+                            const cell9 = row.insertCell(8);
+                            const cell10 = row.insertCell(9);
+
+                            const novoDugme = document.createElement('button');
+
+                              // Dodavanje teksta na dugme
+                              novoDugme.textContent = 'Obrisi';
+                              novoDugme.id = item.id;
+
+                              // Dodavanje akcije na klik dugmeta
+                              novoDugme.addEventListener('click', function() {
+                                  alert('Dugme je kliknuto!');
+                                  // Dodajte željenu akciju ovde
+                                  console.log(novoDugme.id);
+                                  // fetch('http://localhost:8084/zakazivanjeservis/api/sale/otkaziklijent/'+novoDugme.id, {
+                                  //     method: 'POST'
+                                  // })
+                                  //     .then( data => {
+                                  //         if (data.msg) {
+                                  //             //prikazi gresku
+                                  //             alert(data.msg);
+                                  //         } else {
+                                            
+                                  //             document.location.reload();
+                                  //         }
+                                  //     });
+                              });
+
+                            cell1.textContent = item.id;
+                            cell2.textContent = item.fiskulturnaSala.managerId; // Prilagodite prema strukturi vaših podataka
+                            cell3.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
+                            cell4.textContent = item.vremeOd;
+                            cell5.textContent = item.tipTreninga.tip; // Prilagodite prema strukturi vaših podataka
+                            cell6.textContent = item.maxBrojOsoba;
+                            cell7.textContent = item.trenutanBrojOsoba;
+                            cell8.textContent = item.fiskulturnaSala.ime; // Prilagodite prema strukturi vaših podataka
+                            cell9.textContent = item.tipTreninga.naziv;
+                            cell10.appendChild(novoDugme);
+                          });
+                                    
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                      }
+
+                    }
+
+
+
+                  } 
   </script>
 </head>
 <body>
@@ -145,16 +390,23 @@
   
   <label for="daysOfWeek">Dan:</label>
   <select id="daysOfWeek" name="daysOfWeek">
-    <option value="ponedeljak">Ponedeljak</option>
-    <option value="utorak">Utorak</option>
-    <option value="sreda">Sreda</option>
-    <option value="četvrtak">Četvrtak</option>
-    <option value="petak">Petak</option>
-    <option value="subota">Subota</option>
-    <option value="nedelja">Nedelja</option>
+    <option value=""></option>
+    <option value="MONDAY">Ponedeljak</option>
+    <option value="TUESDAY">Utorak</option>
+    <option value="WEDNESDAY">Sreda</option>
+    <option value="THURSDAY">Četvrtak</option>
+    <option value="FRIDAY">Petak</option>
+    <option value="SATURDAY">Subota</option>
+    <option value="SUNDAY">Nedelja</option>
   </select>
   <label for="type">Tip:</label>
-  <input type="text" id="type" name="type">
+  <select id="type" name="type">
+    <option value=""></option>
+    <option value="individualni">I  ndividualni</option>
+    <option value="grupni">Grupni</option>
+  </select>
+  <label for="mana">Menadzer:</label>
+  <input type="text" id="mana" name="mana">
   <button type="button" onclick="filtriraj()">Filtriraj</button>
   <br>
   <table>
@@ -165,7 +417,7 @@
         <th>ManagerId</th>
         <th>Datum</th>
         <th>Vreme Od</th>
-        <th>Vreme Do</th>
+        <th>Tip(individualni ili grupni)</th>
         <th>Kapacitet</th>
         <th>Broj rezervacija</th>
         <th>Sala</th>

@@ -33,13 +33,13 @@ public class TerminController {
     }
 
     @GetMapping("/dan")
-    @CheckSecurity(roles={"Klijent","Manager"})
+    @CheckSecurity(roles={"Klijent","Manager","Admin"})
     public ResponseEntity<Page<TerminDto>> findPoDanu(@RequestHeader("Authorization") String authorization, @RequestParam String dan,Pageable pageable) {
         return new ResponseEntity<>(terminService.findDan(dan,pageable), HttpStatus.OK);
     }
 
     @GetMapping("/tip")
-    @CheckSecurity(roles={"Klijent","Manager"})
+    @CheckSecurity(roles={"Klijent","Manager","Admin"})
     public ResponseEntity<Page<TerminDto>> findPoTipu(@RequestHeader("Authorization") String authorization, @RequestParam String tip,Pageable pageable) {
         return new ResponseEntity<>(terminService.findTip(tip,pageable), HttpStatus.OK);
     }
