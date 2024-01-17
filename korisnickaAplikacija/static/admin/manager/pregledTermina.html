@@ -37,6 +37,9 @@
 
 <script>
 
+
+
+    // Funkcija za dohvat podataka o terminu na osnovu terminId
     function dohvatiPodatkeOTerminu(terminId) {
         const tok = localStorage.getItem('userToken');
 
@@ -55,6 +58,31 @@
             });
     }
 
+    // Funkcija za slanje POST zahteva za otkazivanje rezervacije
+    function otkaziRezervaciju(rezervacijaId) {
+        const tok = localStorage.getItem('userToken');
+
+        fetch(`http://localhost:8084/zakazivanjeservis/api/rezervacija/otkazimanager/${rezervacijaId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${tok}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(data => {
+                if (data.msg) {
+                    // Prikazati poruku ili izvršiti odgovarajuće akcije
+                    alert(data.msg);
+                } else {
+                    // Ažurirati tabelu ili izvršiti druge akcije po potrebi
+                    console.log('Rezervacija uspešno otkazana.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
     // Funkcija za popunjavanje tabele sa rezervacijama
     function popuniTabeluSaRezervacijama(rezervacije) {
         const tableBody = document.getElementById('table');
@@ -69,39 +97,36 @@
             const cell6 = row.insertCell(5);
             const cell7 = row.insertCell(6);
 
-            // Kreiranje dugmeta za dohvat podataka o terminu
-            const novoDugme = document.createElement('button');
-            novoDugme.textContent = 'Prikaži podatke o terminu';
-
-            // Dodajte akciju na klik dugmeta
-            novoDugme.addEventListener('click', function () {
-                // Dohvatite podatke o terminu na osnovu terminId iz trenutne rezervacije
-                dohvatiPodatkeOTerminu(rezervacija.terminId)
-                    .then(termin => {
-                        // Sada imate podatke o terminu
-                        console.log(termin);
-
-                        // Ažurirajte ćelije u redu sa podacima o terminu
-                        cell3.textContent = termin.fiskulturnaSala.ime;
-                        cell4.textContent = termin.tipTreninga.naziv;
-                        cell5.textContent = termin.maxBrojOsoba;
-                        cell6.textContent = termin.trenutanBrojOsoba;
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
-
             // Popunjavanje ćelija sa podacima iz rezervacije
-            console.log(rezervacija.vremeOd);
             cell1.textContent = rezervacija.datum;
             cell2.textContent = rezervacija.vremeOd + ' - ' + rezervacija.vremeDo;
-            cell7.appendChild(novoDugme);
-            // Dodajte ostale ćelije prema potrebi
+
+            // Dohvatite podatke o terminu na osnovu terminId iz trenutne rezervacije
+            dohvatiPodatkeOTerminu(rezervacija.terminId)
+                .then(termin => {
+                    // Ažuriranje ćelija u redu sa podacima o terminu
+                    cell3.textContent = termin.fiskulturnaSala.ime;
+                    cell4.textContent = termin.tipTreninga.naziv;
+                    cell5.textContent = termin.maxBrojOsoba;
+                    cell6.textContent = termin.trenutanBrojOsoba;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            // Dodavanje dugmeta "Otkaži" sa odgovarajućom funkcionalnošću
+            const otkaziDugme = document.createElement('button');
+            otkaziDugme.textContent = 'Otkaži';
+            otkaziDugme.addEventListener('click', function () {
+                // Poziv funkcije za otkazivanje rezervacije
+                otkaziRezervaciju(rezervacija.id);
+            });
+            cell7.appendChild(otkaziDugme);
         });
     }
+
+    // Pozivanje funkcije za dohvat svih rezervacija odmah nakon učitavanja stranice
     const tok = localStorage.getItem('userToken');
-    // Pozivanje funkcije za dohvat svih rezervacija
     fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/sveRezervacije', {
         method: 'GET',
         headers: {
@@ -148,7 +173,7 @@
                             <a class="nav-link" href="manager/dodavanjeTermina.html">Dodavanje termina</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="manager/pregledTermina.html">Pregled termina</a>
+                            <a class="nav-link active" href="manager/pregledTermina.html">Pregled rezervacija</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="manager/pregledMejlova.html">Pregled mejlova</a>
