@@ -51,4 +51,10 @@ public class RezervacijaController {
     public ResponseEntity<Page<RezervacijaDto>> getRezervacijeOdKlijenta(@RequestHeader("Authorization") String authorization, @RequestParam Long userId, Pageable pageable) {
         return new ResponseEntity<>(rezervacijaService.findRezervacijeOdKlijenta(userId,pageable), HttpStatus.OK);
     }
+
+    @GetMapping("/sveRezervacije")
+    @CheckSecurity(roles={"Manager"})
+    public ResponseEntity<Page<RezervacijaDto>> getRezervacijeSve(@RequestHeader("Authorization") String authorization, Pageable pageable) {
+        return new ResponseEntity<>(rezervacijaService.findSveRezervacije(pageable), HttpStatus.OK);
+    }
 }

@@ -48,15 +48,89 @@
 </style>
 
 <script>
-    window.addEventListener('load', () => {
-        document.getElementById('logout').addEventListener('click', () => {
-            // Brisanje svih podataka iz localStorage
-            localStorage.clear();
-            console.log('logout!!!!!!!');
-            // Preusmeravanje na stranicu za logout (prilagodite prema vašim potrebama)
-        });
+    window.addEventListener('load',()=>{
+      document.getElementById('logout').addEventListener('click', () => {
+        // Brisanje svih podataka iz localStorage
+        localStorage.clear();
+        console.log('logout!!!!!!!');
+        // Preusmeravanje na stranicu za logout (prilagodite prema vašim potrebama)
+      });
+      const userDataString = localStorage.getItem('userData');
+  
+        // Provera da li postoje podaci
+        if (userDataString) {
+          // Pretvaranje JSON stringa u objekat
+          const userData = JSON.parse(userDataString);
+          const token = localStorage.getItem('userToken');
+          const korisnik = userData.email;
+          const managerId = userData.id;
+          console.log(token);
+          // Popunjavanje polja obrasca sa podacima iz userData objekta
+          fetch('http://localhost:8084/zakazivanjeservis/api/sale/sale?managerId='+ managerId, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                     // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
+                  const tableBody = document.getElementById('table');
+                  console.log(data);
+                  data.content.forEach(item => {
+                    const row = tableBody.insertRow();
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2);
+                    const cell4 = row.insertCell(3);
+
+                    const novoDugme = document.createElement('button');
+
+                      // Dodavanje teksta na dugme
+                      novoDugme.textContent = 'Obrisi';
+                      novoDugme.id = item.id;
+
+                      // Dodavanje akcije na klik dugmeta
+                      novoDugme.addEventListener('click', function() {
+                          alert('Dugme je kliknuto!');
+                          // Dodajte željenu akciju ovde
+                          console.log(novoDugme.id);
+                          // fetch('http://localhost:8084/zakazivanjeservis/api/sale/otkaziklijent/'+novoDugme.id, {
+                          //     method: 'POST'
+                          // })
+                          //     .then( data => {
+                          //         if (data.msg) {
+                          //             //prikazi gresku
+                          //             alert(data.msg);
+                          //         } else {
+                                    
+                          //             document.location.reload();
+                          //         }
+                          //     });
+                      });
+
+                    cell1.textContent = item.id;
+                    cell2.textContent = item.ime; // Prilagodite prema strukturi vaših podataka
+                    cell3.textContent = item.managerId; // Prilagodite prema strukturi vaših podataka
+                    cell4.appendChild(novoDugme);
+                  });               
+                 })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } else {
+          console.error('Podaci o korisniku nisu pronađeni u localStorage.');
+        };
+
     });
-</script>
+    
+  </script>
 
 <body>
     <main class="container">
@@ -94,38 +168,22 @@
             </nav>
 
         </div>
-        <h1>Prikaz sala</h1>
-        <p>:)</p>
-
-        <!DOCTYPE html>
-        <html lang="en">
-
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Fiskulturne Sale</title>
-        </head>
-
-        <body>
-
-            <table border="1" id="saleTable">
-                <thead>
-                    <tr>
-                        <th>Ime</th>
-                        <th>Opis</th>
-                        <th>Broj Trenera</th>
-                        <th>Besplatan Trening</th>
-                        <th>Manager ID</th>
-                        <th>Tip Treninga</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-
-        </body>
+        <h1>Spisak svih sala</h1>
+  
+  <br>
+  <table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Naziv</th>
+        <th>Menadzer</th>
+        <th>Akcija</th>
+    </tr>
+    </thead>
+    <tbody id="table">
+    <!-- Podaci će biti dinamički dodati ovde -->
+    </tbody>
+</table>
 
         </html>
 

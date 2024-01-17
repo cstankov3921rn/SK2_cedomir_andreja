@@ -170,4 +170,9 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     public Page<RezervacijaDto> findRezervacijeOdKlijenta(Long userId, Pageable pageable) {
         return rezervacijaRepository.findRezervacijaByUserId(userId,pageable).map(rezervacijaMapper::rezervacijaToRezervacijaDto);
     }
+
+    @Override
+    public Page<RezervacijaDto> findSveRezervacije(Pageable pageable) {
+        return rezervacijaRepository.findAll(pageable).map(rezervacijaMapper::rezervacijaToRezervacijaDto);
+    }
 }

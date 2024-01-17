@@ -13,4 +13,6 @@ public interface RezervacijaService {
     void otkaziKlijent(Long id);
 
     Page<RezervacijaDto> findRezervacijeOdKlijenta(Long userId, Pageable pageable);
+
+    Page<RezervacijaDto> findSveRezervacije(Pageable pageable);
 }

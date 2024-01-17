@@ -36,357 +36,93 @@
 </style>
 
 <script>
-    window.addEventListener('load', () => {
-        document.getElementById('logout').addEventListener('click', () => {
-        // Brisanje svih podataka iz localStorage
-        localStorage.clear();
-        console.log('logout!!!!!!!');
-        // Preusmeravanje na stranicu za logout (prilagodite prema vašim potrebama)
-      });
-        const userDataString = localStorage.getItem('userData');
 
-        // Provera da li postoje podaci
-        if (userDataString) {
-            // Pretvaranje JSON stringa u objekat
-            const userData = JSON.parse(userDataString);
-            const tok = localStorage.getItem('userToken');
-            const korisnik = userData.email;
-            console.log(tok);
-            console.log(korisnik);
-            // Popunjavanje polja obrasca sa podacima iz userData objekta
-            fetch('http://localhost:8084/zakazivanjeservis/api/termin/all', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${tok}`,
-                    'Content-Type': 'application/json'
+    function dohvatiPodatkeOTerminu(terminId) {
+        const tok = localStorage.getItem('userToken');
+
+        return fetch(`http://localhost:8084/zakazivanjeservis/api/termin/${terminId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${tok}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
-                    const tableBody = document.getElementById('table');
-                    console.log(data);
-                    data.content.forEach(item => {
-                        if (!item.zauzet) {
-                            const row = tableBody.insertRow();
-                            const cell1 = row.insertCell(0);
-                            const cell2 = row.insertCell(1);
-                            const cell3 = row.insertCell(2);
-                            const cell4 = row.insertCell(3);
-                            const cell5 = row.insertCell(4);
-                            const cell6 = row.insertCell(5);
-                            const cell7 = row.insertCell(6);
-                            const cell8 = row.insertCell(7);
-                            const cell9 = row.insertCell(8);
+                return response.json();
+            });
+    }
 
-                            // Kreiranje dugmeta
-                            const novoDugme = document.createElement('button');
-
-                            // Dodavanje teksta na dugme
-                            novoDugme.textContent = 'Zakazi';
-
-                            // Dodavanje akcije na klik dugmeta
-                            novoDugme.addEventListener('click', function () {
-                                alert('Dugme je kliknuto!');
-                                // Dodajte željenu akciju ovde
-                                    // const terminId=item.id;
-                                    console.log(item);
-                                fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/otkazimanager/' + item.id, {
-                                    method: 'POST'
-                                    //headers: { 'Content-Type': 'application/json' }
-                                    //body: JSON.stringify(rezervacija)
-                                })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        if (data.msg) {
-                                            //prikazi gresku
-                                            alert(data.msg);
-                                        } else {
-                                            //window.location.reload(true);
-                                            //location.replace(location.href);
-                                            //document.location.reload();
-                                        }
-                                    });
-                            });
-                            const dani = ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"];
-                            const danuv = new Date(item.dan);
-                            console.log(dani[danuv.getDay()]);
-                            cell1.textContent = dani[danuv.getDay()]; // Prilagodite prema strukturi vaših podataka
-                            cell2.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
-                            cell3.textContent = item.maxBrojOsoba;
-                            cell4.textContent = item.trenutanBrojOsoba;
-                            cell5.textContent = item.vremeOd;
-                            cell6.textContent = item.vremeDo;
-                            cell7.textContent = item.fiskulturnaSala.ime;
-                            cell8.textContent = item.tipTreninga.naziv;
-                            cell9.appendChild(novoDugme);
-                        }
-
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        } else {
-            console.error('Podaci o korisniku nisu pronađeni u localStorage.');
-        };
-
-    });
-    function filtriraj() {
+    // Funkcija za popunjavanje tabele sa rezervacijama
+    function popuniTabeluSaRezervacijama(rezervacije) {
         const tableBody = document.getElementById('table');
 
-        // Ukloni sve redove iz tabele (osim prvog koji sadrži zaglavlje)
-        while (tableBody.rows.length > 0) {
-            tableBody.deleteRow(0);
-        }
-        const korisnik = JSON.parse(localStorage.getItem('userData')).email;
-        const unos = document.getElementById('daysOfWeek').value;
-        const tip = document.getElementById('type').value;
-        console.log(tip);
-        console.log(unos);
-        const tok = localStorage.getItem('userToken');
-        console.log(unos);
-        if (unos == "") {
-            if (tip == "") {
-                fetch('http://localhost:8084/zakazivanjeservis/api/termin/all', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${tok}`,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
-                        const tableBody = document.getElementById('table');
-                        console.log(data);
-                        data.content.forEach(item => {
-                            if (!item.zauzet) {
-                                const row = tableBody.insertRow();
-                                const cell1 = row.insertCell(0);
-                                const cell2 = row.insertCell(1);
-                                const cell3 = row.insertCell(2);
-                                const cell4 = row.insertCell(3);
-                                const cell5 = row.insertCell(4);
-                                const cell6 = row.insertCell(5);
-                                const cell7 = row.insertCell(6);
-                                const cell8 = row.insertCell(7);
-                                const cell9 = row.insertCell(8);
+        rezervacije.forEach(rezervacija => {
+            const row = tableBody.insertRow();
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            const cell3 = row.insertCell(2);
+            const cell4 = row.insertCell(3);
+            const cell5 = row.insertCell(4);
+            const cell6 = row.insertCell(5);
+            const cell7 = row.insertCell(6);
 
-                                // Kreiranje dugmeta
-                                const novoDugme = document.createElement('button');
+            // Kreiranje dugmeta za dohvat podataka o terminu
+            const novoDugme = document.createElement('button');
+            novoDugme.textContent = 'Prikaži podatke o terminu';
 
-                                // Dodavanje teksta na dugme
-                                novoDugme.textContent = 'Zakazi';
+            // Dodajte akciju na klik dugmeta
+            novoDugme.addEventListener('click', function () {
+                // Dohvatite podatke o terminu na osnovu terminId iz trenutne rezervacije
+                dohvatiPodatkeOTerminu(rezervacija.terminId)
+                    .then(termin => {
+                        // Sada imate podatke o terminu
+                        console.log(termin);
 
-                                // Dodavanje akcije na klik dugmeta
-                                novoDugme.addEventListener('click', function () {
-                                    alert('Dugme je kliknuto!');
-                                    // Dodajte željenu akciju ovde
-                                    // const terminId=item.id;
-                                     console.log(item);
-                                    fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/otkazimanager/' + item.id, {
-                                        method: 'POST'
-                                        //headers: { 'Content-Type': 'application/json' }
-                                        //body: JSON.stringify(rezervacija)
-                                    })
-                                        .then(res => res.json())
-                                        .then(data => {
-                                            if (data.msg) {
-                                                //prikazi gresku
-                                                alert(data.msg);
-                                            } else {
-                                                //document.location.reload();
-                                            }
-                                        });
-                                });
-                                const dani = ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"];
-                                const danuv = new Date(item.dan);
-                                console.log(dani[danuv.getDay()]);
-                                cell1.textContent = dani[danuv.getDay()]; // Prilagodite prema strukturi vaših podataka
-                                cell2.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
-                                cell3.textContent = item.maxBrojOsoba;
-                                cell4.textContent = item.trenutanBrojOsoba;
-                                cell5.textContent = item.vremeOd;
-                                cell6.textContent = item.vremeDo;
-                                cell7.textContent = item.fiskulturnaSala.ime;
-                                cell8.textContent = item.tipTreninga.naziv;
-                                cell9.appendChild(novoDugme);
-                            }
-
-                        });
+                        // Ažurirajte ćelije u redu sa podacima o terminu
+                        cell3.textContent = termin.fiskulturnaSala.ime;
+                        cell4.textContent = termin.tipTreninga.naziv;
+                        cell5.textContent = termin.maxBrojOsoba;
+                        cell6.textContent = termin.trenutanBrojOsoba;
                     })
                     .catch(error => {
                         console.error('Error:', error);
                     });
-            } else {
-                fetch('http://localhost:8084/zakazivanjeservis/api/termin/tip?tip=' + tip, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${tok}`,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
-                        const tableBody = document.getElementById('table');
-                        console.log(data);
-                        data.content.forEach(item => {
-                            if (!item.zauzet) {
-                                const row = tableBody.insertRow();
-                                const cell1 = row.insertCell(0);
-                                const cell2 = row.insertCell(1);
-                                const cell3 = row.insertCell(2);
-                                const cell4 = row.insertCell(3);
-                                const cell5 = row.insertCell(4);
-                                const cell6 = row.insertCell(5);
-                                const cell7 = row.insertCell(6);
-                                const cell8 = row.insertCell(7);
-                                const cell9 = row.insertCell(8);
+            });
 
-                                // Kreiranje dugmeta
-                                const novoDugme = document.createElement('button');
-
-                                // Dodavanje teksta na dugme
-                                novoDugme.textContent = 'Zakazi';
-
-                                // Dodavanje akcije na klik dugmeta
-                                novoDugme.addEventListener('click', function () {
-                                    alert('Dugme je kliknuto!');
-                                    // Dodajte željenu akciju ovde
-                                    // const terminId=item.id;
-                                    console.log(item);
-                                    fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/otkazimanager/' + item.id, {
-                                        method: 'POST'
-                                        //headers: { 'Content-Type': 'application/json' }
-                                        //body: JSON.stringify(rezervacija)
-                                    })
-                                        .then(res => res.json())
-                                        .then(data => {
-                                            if (data.msg) {
-                                                //prikazi gresku
-                                                alert(data.msg);
-                                            } else {
-                                                //document.location.reload();
-                                            }
-                                        });
-                                });
-                                const dani = ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"];
-                                const danuv = new Date(item.dan);
-                                console.log(dani[danuv.getDay()]);
-                                cell1.textContent = dani[danuv.getDay()]; // Prilagodite prema strukturi vaših podataka
-                                cell2.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
-                                cell3.textContent = item.maxBrojOsoba;
-                                cell4.textContent = item.trenutanBrojOsoba;
-                                cell5.textContent = item.vremeOd;
-                                cell6.textContent = item.vremeDo;
-                                cell7.textContent = item.fiskulturnaSala.ime;
-                                cell8.textContent = item.tipTreninga.naziv;
-                                cell9.appendChild(novoDugme);
-                            }
-
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            }
-
-        } else {
-            fetch('http://localhost:8084/zakazivanjeservis/api/termin/dan?dan=' + unos, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${tok}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
-                    const tableBody = document.getElementById('table');
-                    console.log(data);
-                    data.content.forEach(item => {
-                        if (!item.zauzet) {
-                            const row = tableBody.insertRow();
-                            const cell1 = row.insertCell(0);
-                            const cell2 = row.insertCell(1);
-                            const cell3 = row.insertCell(2);
-                            const cell4 = row.insertCell(3);
-                            const cell5 = row.insertCell(4);
-                            const cell6 = row.insertCell(5);
-                            const cell7 = row.insertCell(6);
-                            const cell8 = row.insertCell(7);
-                            const cell9 = row.insertCell(8);
-
-                            // Kreiranje dugmeta
-                            const novoDugme = document.createElement('button');
-
-                            // Dodavanje teksta na dugme
-                            novoDugme.textContent = 'Zakazi';
-
-                            // Dodavanje akcije na klik dugmeta
-                            novoDugme.addEventListener('click', function () {
-                                alert('Dugme je kliknuto!');
-                                // Dodajte željenu akciju ovde
-                                // const terminId=item.id;
-                                 console.log(item);
-                                fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/otkazimanager/' + item.id, {
-                                    method: 'POST'
-                                    //headers: { 'Content-Type': 'application/json' }
-                                    //body: JSON.stringify(rezervacija)
-                                })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        if (data.msg) {
-                                            //prikazi gresku
-                                            alert(data.msg);
-                                        } else {
-                                            //document.location.reload();
-                                        }
-                                    });
-                            });
-                            const dani = ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"];
-                            const danuv = new Date(item.dan);
-                            console.log(dani[danuv.getDay()]);
-                            cell1.textContent = dani[danuv.getDay()]; // Prilagodite prema strukturi vaših podataka
-                            cell2.textContent = item.datum; // Prilagodite prema strukturi vaših podataka
-                            cell3.textContent = item.maxBrojOsoba;
-                            cell4.textContent = item.trenutanBrojOsoba;
-                            cell5.textContent = item.vremeOd;
-                            cell6.textContent = item.vremeDo;
-                            cell7.textContent = item.fiskulturnaSala.ime;
-                            cell8.textContent = item.tipTreninga.naziv;
-                            cell9.appendChild(novoDugme);
-                        }
-
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
+            // Popunjavanje ćelija sa podacima iz rezervacije
+            console.log(rezervacija.vremeOd);
+            cell1.textContent = rezervacija.datum;
+            cell2.textContent = rezervacija.vremeOd + ' - ' + rezervacija.vremeDo;
+            cell7.appendChild(novoDugme);
+            // Dodajte ostale ćelije prema potrebi
+        });
     }
+    const tok = localStorage.getItem('userToken');
+    // Pozivanje funkcije za dohvat svih rezervacija
+    fetch('http://localhost:8084/zakazivanjeservis/api/rezervacija/sveRezervacije', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${tok}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Popunjavanje tabele sa rezervacijama
+            popuniTabeluSaRezervacijama(data.content);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
 </script>
 
 <body>
@@ -419,14 +155,14 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="index.html" id="logout">Logout</a>
-                          </li>
+                        </li>
                     </ul>
                 </div>
             </nav>
 
         </div>
-        <h1>Termini</h1>
-
+        <h1>Rezervacije</h1>
+        <!-- 
         <label for="daysOfWeek">Dan:</label>
         <select id="daysOfWeek" name="daysOfWeek">
             <option value=""></option>
@@ -441,25 +177,21 @@
         <label for="type">Tip:</label>
         <input type="text" id="type" name="type">
         <button type="button" onclick="filtriraj()">Filtriraj</button>
-        <br>
-        <table>
+        <br> -->
+        <table border="1">
             <thead>
                 <tr>
-                <tr>
-                    <th>Dan</th>
                     <th>Datum</th>
-                    <th>Kapacitet</th>
-                    <th>Broj rezervacija</th>
-                    <th>Vreme Od</th>
-                    <th>Vreme Do</th>
-                    <th>Sala</th>
+                    <th>Vreme</th>
+                    <th>Fiskulturna Sala</th>
                     <th>Tip Treninga</th>
-                    <th>Akcija</th>
-                </tr>
+                    <th>Maks. Broj Osoba</th>
+                    <th>Trenutni Broj Osoba</th>
+                    <th>Akcije</th>
                 </tr>
             </thead>
             <tbody id="table">
-                <!-- Podaci će biti dinamički dodati ovde -->
+                <!-- Tabela će biti dinamički popunjena JavaScript-om -->
             </tbody>
         </table>
 
