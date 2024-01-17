@@ -67,6 +67,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="manager/pregledMejlova.html">Pregled mejlova</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html" id="logout">Logout</a>
+                      </li>
                 </ul>
             </div>
         </nav>
@@ -93,6 +96,12 @@
 
 <script>
     window.addEventListener('load',()=>{
+        document.getElementById('logout').addEventListener('click', () => {
+        // Brisanje svih podataka iz localStorage
+        localStorage.clear();
+        console.log('logout!!!!!!!');
+        // Preusmeravanje na stranicu za logout (prilagodite prema vašim potrebama)
+      });
       const userDataString = localStorage.getItem('userData');
   
         // Provera da li postoje podaci

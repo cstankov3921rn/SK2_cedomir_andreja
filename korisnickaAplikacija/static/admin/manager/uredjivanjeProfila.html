@@ -13,6 +13,12 @@
 <script>
     // Funkcija koja će se pozvati pri učitavanju stranice
       window.addEventListener('load', () => {
+        document.getElementById('logout').addEventListener('click', () => {
+        // Brisanje svih podataka iz localStorage
+        localStorage.clear();
+        console.log('logout!!!!!!!');
+        // Preusmeravanje na stranicu za logout (prilagodite prema vašim potrebama)
+      });
         // Uzimanje podataka iz localStorage
         const userDataString = localStorage.getItem('userData');
 
@@ -123,6 +129,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="manager/pregledMejlova.html">Pregled mejlova</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="index.html" id="logout">Logout</a>
                     </li>
                 </ul>
             </div>
