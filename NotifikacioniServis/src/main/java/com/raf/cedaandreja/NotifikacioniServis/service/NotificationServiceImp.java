@@ -155,7 +155,7 @@ public class NotificationServiceImp implements NotificationService {
         notificationRepository.save(notification);
 
     }
-    @Async
+
     @Override
     public Page<Notification> findAllNotification(Pageable pageable) {
         return notificationRepository.findAll(pageable);

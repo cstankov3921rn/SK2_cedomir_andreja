@@ -25,14 +25,14 @@
           const userData = JSON.parse(userDataString);
           const token = localStorage.getItem('userToken');
           const korisnik = userData.email;
+          console.log(token);
           // Popunjavanje polja obrasca sa podacima iz userData objekta
-          fetch('http://localhost:8084/notificationservis/api/notifications/my', {
+          fetch('http://localhost:8084/notificationservis/api/notifications/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(korisnik)
+                    }
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -47,9 +47,11 @@
                     const row = tableBody.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2);
 
-                    cell1.textContent = item.type; // Prilagodite prema strukturi vaših podataka
-                    cell2.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
+                    cell1.textContent = item.korisnik;
+                    cell2.textContent = item.type; // Prilagodite prema strukturi vaših podataka
+                    cell3.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
                   });               
                  })
                 .catch(error => {
@@ -61,17 +63,16 @@
 
     });
     function filtriraj(){
-      const unos = document.getElementById('type');
+      const unos = document.getElementById('type').value;
+        const token = localStorage.getItem('userToken');
+        console.log(unos);
       if(unos==''){
-        fetch('http://localhost:8084/notificationservis/api/notifications/my', {
+        fetch('http://localhost:8084/notificationservis/api/notifications/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      korisnik: email
-                    })
+                    }
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -86,25 +87,23 @@
                     const row = tableBody.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2);
 
-                    cell1.textContent = item.type; // Prilagodite prema strukturi vaših podataka
-                    cell2.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
+                    cell1.textContent = item.korisnik;
+                    cell2.textContent = item.type; // Prilagodite prema strukturi vaših podataka
+                    cell3.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
                   });               
                  })
                 .catch(error => {
                     console.error('Error:', error);
                 });
       }else{
-        fetch('http://localhost:8084/notificationservis/api/notifications/myfilter', {
+        fetch('http://localhost:8084/notificationservis/api/notifications/alltype?type='+unos, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      korisnik: email,
-                      type: unos
-                    })
+                    }
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -119,9 +118,11 @@
                     const row = tableBody.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2);
 
-                    cell1.textContent = item.type; // Prilagodite prema strukturi vaših podataka
-                    cell2.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
+                    cell1.textContent = item.korisnik;
+                    cell2.textContent = item.type; // Prilagodite prema strukturi vaših podataka
+                    cell3.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
                   });               
                  })
                 .catch(error => {
