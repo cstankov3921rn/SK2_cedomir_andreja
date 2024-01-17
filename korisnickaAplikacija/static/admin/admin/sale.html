@@ -25,14 +25,14 @@
           const userData = JSON.parse(userDataString);
           const token = localStorage.getItem('userToken');
           const korisnik = userData.email;
+          console.log(token);
           // Popunjavanje polja obrasca sa podacima iz userData objekta
-          fetch('http://localhost:8084/notificationservis/api/notifications/my', {
+          fetch('http://localhost:8084/zakazivanjeservis/api/sale/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(korisnik)
+                    }
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -43,13 +43,43 @@
                 .then(data => {
                      // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
                   const tableBody = document.getElementById('table');
-                  data.forEach(item => {
+                  console.log(data);
+                  data.content.forEach(item => {
                     const row = tableBody.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2);
+                    const cell4 = row.insertCell(3);
 
-                    cell1.textContent = item.type; // Prilagodite prema strukturi vaših podataka
-                    cell2.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
+                    const novoDugme = document.createElement('button');
+
+                      // Dodavanje teksta na dugme
+                      novoDugme.textContent = 'Obrisi';
+                      novoDugme.id = item.id;
+
+                      // Dodavanje akcije na klik dugmeta
+                      novoDugme.addEventListener('click', function() {
+                          alert('Dugme je kliknuto!');
+                          // Dodajte željenu akciju ovde
+                          console.log(novoDugme.id);
+                          // fetch('http://localhost:8084/zakazivanjeservis/api/sale/otkaziklijent/'+novoDugme.id, {
+                          //     method: 'POST'
+                          // })
+                          //     .then( data => {
+                          //         if (data.msg) {
+                          //             //prikazi gresku
+                          //             alert(data.msg);
+                          //         } else {
+                                    
+                          //             document.location.reload();
+                          //         }
+                          //     });
+                      });
+
+                    cell1.textContent = item.id;
+                    cell2.textContent = item.ime; // Prilagodite prema strukturi vaših podataka
+                    cell3.textContent = item.managerId; // Prilagodite prema strukturi vaših podataka
+                    cell4.appendChild(novoDugme);
                   });               
                  })
                 .catch(error => {
@@ -60,75 +90,7 @@
         };
 
     });
-    function filtriraj(){
-      const unos = document.getElementById('type');
-      if(unos==''){
-        fetch('http://localhost:8084/notificationservis/api/notifications/my', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      korisnik: email
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                     // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
-                  const tableBody = document.getElementById('table');
-                  data.forEach(item => {
-                    const row = tableBody.insertRow();
-                    const cell1 = row.insertCell(0);
-                    const cell2 = row.insertCell(1);
-
-                    cell1.textContent = item.type; // Prilagodite prema strukturi vaših podataka
-                    cell2.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
-                  });               
-                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-      }else{
-        fetch('http://localhost:8084/notificationservis/api/notifications/myfilter', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      korisnik: email,
-                      type: unos
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                     // Ovde treba obraditi dobijene podatke i dinamički ih dodati u tabelu
-                  const tableBody = document.getElementById('table');
-                  data.forEach(item => {
-                    const row = tableBody.insertRow();
-                    const cell1 = row.insertCell(0);
-                    const cell2 = row.insertCell(1);
-
-                    cell1.textContent = item.type; // Prilagodite prema strukturi vaših podataka
-                    cell2.textContent = item.parameters; // Prilagodite prema strukturi vaših podataka
-                  });               
-                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-      }
-    }
+    
   </script>
 </head>
 <body>
@@ -169,16 +131,14 @@
   </div>
   <h1>Spisak svih sala</h1>
   
-  <label for="type">Tip:</label>
-  <input type="text" id="type" name="type">
-  <button type="button" onclick="filtriraj()">Filtriraj</button>
   <br>
   <table>
     <thead>
     <tr>
-        <th>Korisnik</th>
-        <th>Tip</th>
-        <th>Parametar</th>
+        <th>Id</th>
+        <th>Naziv</th>
+        <th>Menadzer</th>
+        <th>Akcija</th>
     </tr>
     </thead>
     <tbody id="table">

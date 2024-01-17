@@ -16,4 +16,6 @@ public interface FiskulturnaSalaRepository extends JpaRepository<FiskulturnaSala
 
     Page<FiskulturnaSala> findFiskulturnaSalaByManagerId(String managerId, Pageable pageable);
 
+    Page<FiskulturnaSala> findAll(Pageable pageable);
+
 }

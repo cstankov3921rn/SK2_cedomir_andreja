@@ -1,5 +1,6 @@
 package com.raf.cedaandreja.ZakazivanjeServis.controller;
 
+import com.raf.cedaandreja.ZakazivanjeServis.domain.FiskulturnaSala;
 import com.raf.cedaandreja.ZakazivanjeServis.dto.FiskulturnaSalaDto;
 import com.raf.cedaandreja.ZakazivanjeServis.dto.FiskulturnaSalaUpdateDto;
 import com.raf.cedaandreja.ZakazivanjeServis.security.CheckSecurity;
@@ -35,5 +36,10 @@ public class FiskulturnaSalaController {
     @CheckSecurity(roles={"Manager"})
     public ResponseEntity<Page<FiskulturnaSalaDto>> getSaleOdManagera(@RequestHeader("Authorization") String authorization, @RequestParam String managerId,Pageable pageable) {
         return new ResponseEntity<>(fiskulturnaSalaService.findSaleOdManagera(managerId,pageable), HttpStatus.OK);
+    }
+    @GetMapping("/all")
+    @CheckSecurity(roles={"Admin"})
+    public ResponseEntity<Page<FiskulturnaSala>> getAllSale(@RequestHeader("Authorization") String authorization, Pageable pageable) {
+        return new ResponseEntity<>(fiskulturnaSalaService.findAllSale(pageable), HttpStatus.OK);
     }
 }

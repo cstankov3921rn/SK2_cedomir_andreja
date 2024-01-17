@@ -30,8 +30,8 @@ public class FiskulturnaSalaServiceImpl implements FiskulturnaSalaService {
     }
 
     @Override
-    public Page<FiskulturnaSalaDto> findAllSale(Pageable pageable) {
-        return null;
+    public Page<FiskulturnaSala> findAllSale(Pageable pageable) {
+        return fiskulturnaSalaRepository.findAll(pageable);
     }
 
     @Override

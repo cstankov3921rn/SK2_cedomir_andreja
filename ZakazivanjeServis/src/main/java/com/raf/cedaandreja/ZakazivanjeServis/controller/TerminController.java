@@ -21,7 +21,7 @@ public class TerminController {
     }
 
     @GetMapping("/all")
-    @CheckSecurity(roles={"Klijent","Manager"})
+    @CheckSecurity(roles={"Klijent","Manager","Admin"})
     public ResponseEntity<Page<TerminDto>> findAll(@RequestHeader("Authorization") String authorization, Pageable pageable) {
         return new ResponseEntity<>(terminService.findAll(pageable), HttpStatus.OK);
     }
